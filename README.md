@@ -1,6 +1,6 @@
 # Efficient-approximate-Frequent-patterns-association-rules-mining
 Some algorithms to fast form high quality approxiamte frequent itemsets or association rules from datasets with large scales of transactions or items
-# Dataset
+# Transactional dataset
 Dataset used in these implementations all look like the follows
 
 1 2 3
@@ -17,7 +17,9 @@ Dataset used in these implementations all look like the follows
 
 Every row is a transaction, which contains some items, where any item is represented by an integar.
 
-The test dataset in these implementation is kosarak.dat, which is a common used dataset to test frequent pattern mining algorithms, and can be obtained from http://fimi.ua.ac.be/data/.
+The test dataset in these implementations is kosarak.dat, which is a common used dataset to test frequent pattern mining algorithms, and can be obtained from http://fimi.ua.ac.be/data/.
+# FP-growth
+FP-growth is a common used and classical algorithm to form frequent pattern from transactional dataset. 'fpgrowth.cpp' is an implementation done by myself, and the function 'void mian()' contains an example to use it.
 
 # BPSOHD: binary particle swarm optimization (PSO) for mining dataset with high dimension
 This algorithm, called BPSO-HD, is designed for mining long patterns from dataset with high number of items. The file 'bpsohd.cpp' is an implemention of it.
@@ -26,4 +28,4 @@ BPSO-HD is proposed in my paper, 'Zhang Z, Huang J, Wei Y. Frequent item sets mi
 
 The original BPSO-HD outputs the top-k long patterns by running k times. This implementation only runs BPSO-HD once, and outputs any pattern, which has been detected by at least one particle, with support higher than the minimum support.
 
-The 'void main()' in bpsohd.cpp is actually an example to use it.
+The 'void main()' in bpsohd.cpp contains an example to use it.
