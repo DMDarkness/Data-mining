@@ -1,6 +1,6 @@
- # Efficient-approximate-Frequent-patterns-association-rules-mining
+# Efficient-approximate-Frequent-patterns-association-rules-mining
 Some algorithms to fast form high quality approxiamte frequent itemsets or association rules from datasets with large scales of transactions or items
-# BPSOHD
+# BPSOHD: binary particle swarm optimization (PSO) for mining dataset with high dimension
 This algorithm, called BPSO-HD, is designed for mining long patterns from dataset with high number of items. The file 'bpsohd.cpp' is an implemention of it.
 
 BPSO-HD is proposed in my paper, 'Zhang Z, Huang J, Wei Y. Frequent item sets mining from high-dimensional dataset based on a novel binary particle swarm optimization[J]. Journal of Central South University, 2016, 23(7): 1700-1708.'
