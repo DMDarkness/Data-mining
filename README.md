@@ -1,5 +1,5 @@
-# Efficient-approximate-Frequent-patterns-association-rules-mining
-Some algorithms to fast form high quality approxiamte frequent itemsets or association rules from datasets with large scales of transactions
+ # Efficient-approximate-Frequent-patterns-association-rules-mining
+Some algorithms to fast form high quality approxiamte frequent itemsets or association rules from datasets with large scales of transactions or items
 # BPSOHD
 This algorithm, called BPSO-HD, is designed for mining long patterns from dataset with high number of items. The file 'bpsohd.cpp' is an implemention of it.
 
