@@ -7,7 +7,7 @@
 
 /****************************************************************************
 File	    : bpsohd.cpp
-Contents	: Mining long frequent patterns through an improved binary particle swarm optimization
+Contents	: Mining long frequent patterns from those datasets with large scale of items through an improved binary particle swarm optimization
 Author		: Zhongjie Zhang, Jian Huang, Ying Wei
 Citation	: Zhang Z, Huang J, Wei Y, et al. Frequent item sets mining from high-dimensional dataset based on a novel binary particle swarm optimization[J]. Journal of Central South University, 2016, 23(7): 1700-1708.   
 ****************************************************************************/
