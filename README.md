@@ -1,4 +1,4 @@
-# Approximate data mining for frequent pattern/association rules
+# Approximate data mining for frequent pattern/association rule
 Some algorithms to fast form high quality approxiamte frequent itemsets or association rules from datasets with large scales of transactions or items
 # Transactional dataset
 Dataset used in these implementations all look like the follows
