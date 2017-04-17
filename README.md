@@ -17,7 +17,7 @@ Dataset used in these implementations all look like the follows
 
 Every row is a transaction, which contains some items, where any item is represented by an integer.
 
-The test dataset in these implementations is kosarak.dat, which is a common used dataset to test frequent pattern mining algorithms, and can be obtained from http://fimi.ua.ac.be/data/.
+The test dataset in these implementations is 'kosarak.dat', which is a common used dataset to test frequent pattern mining algorithms, and can be obtained from http://fimi.ua.ac.be/data/.
 # FP-growth
 FP-growth is a common used and classical algorithm to form frequent pattern from transactional dataset. 'fpgrowth.cpp' is an implementation done by myself, and the function 'void mian()' contains an example to use it.
 
