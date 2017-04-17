@@ -15,7 +15,7 @@ Dataset used in these implementations all look like the follows
 
 ...
 
-Every row is a transaction, which contains some items, where any item is represented by an integar.
+Every row is a transaction, which contains some items, where any item is represented by an integer.
 
 The test dataset in these implementations is kosarak.dat, which is a common used dataset to test frequent pattern mining algorithms, and can be obtained from http://fimi.ua.ac.be/data/.
 # FP-growth
@@ -29,3 +29,9 @@ BPSO-HD is proposed in my paper, 'Zhang Z, Huang J, Wei Y. Frequent item sets mi
 The original BPSO-HD outputs the top-k long patterns by running k times. This implementation only runs BPSO-HD once, and outputs any pattern, which has been detected by at least one particle, with support higher than the minimum support.
 
 The 'void main()' in bpsohd.cpp contains an example to use it.
+# FIGF
+'figf.cpp' is an implementation of the algorithm proposed in my paper, 'Zhang Z, Huang J, Wei Y. FI-FG: frequent item sets mining from datasets with high number of transactions by granular computing and fuzzy set theory[J]. Mathematical Problems in Engineering, 2015, 2015.', which can be found at http://downloads.hindawi.com/journals/mpe/2015/623240.pdf.
+
+This algorithm firstly reduce the scale of dataset by information granulation, and then, it extracts the approximate ferquent patterns from those granules. The method for information granulation is based on the Principle of Justifiable Granularity, whose details can be found in the papaer 'Pedrycz W, Homenda W. Building the fundamentals of granular computing: A principle of justifiable granularity[J]. Applied Soft Computing, 2013, 13(10): 4209-4218.'
+
+In this implementation, some modifications are made to improve the original FI-GF, where the specificity and coverage is designed accorrding to the equation (3) and (4) in the paper of Prof. Pedrycz. and the highest value of specificity multipule coverage is detected when its current value is smaller than its last value.
