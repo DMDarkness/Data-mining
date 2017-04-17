@@ -36,4 +36,4 @@ This algorithm firstly reduces the scale of dataset by information granularity, 
 
 In this implementation, some modifications are made to improve the performance of the original FI-GF, where the specificity and coverage is designed according to the equation (3) and equation (4) in the paper of Prof. Pedrycz. and the highest value of specificity multiple coverage is detected when its current value is smaller than its last value.
 
-The 'void main()' in figf.cpp contains an example to use it.
+The 'void main()' in 'figf.cpp' contains an example to use it.
