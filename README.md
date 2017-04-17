@@ -20,7 +20,8 @@ Every row is a transaction, which contains some items, where any item is represe
 The test dataset in these implementations is 'kosarak.dat', which is a common used dataset to test frequent pattern mining algorithms, and can be obtained from http://fimi.ua.ac.be/data/.
 # FP-growth
 FP-growth is a common used and classical algorithm to form frequent pattern from transactional dataset. 'fpgrowth.cpp' is an implementation done by myself, and the function 'void mian()' contains an example to use it.
-
+# Apriori
+Apriori is also a common used algorithm to form frequent pattern. In 'figf.cpp', there is a parameter 'Apri'. If 'Apri' is set to 'true', 'figf.cpp' becomes an implementation of Apriori, and the function 'void mian()' contains an example to use it.
 # BPSOHD: binary particle swarm optimization (PSO) for mining dataset with high dimension
 This algorithm, called BPSO-HD, is designed for mining long patterns from dataset with high number of items. The file 'bpsohd.cpp' is an implementation of it.
 
