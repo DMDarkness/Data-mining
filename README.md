@@ -1,5 +1,5 @@
-# Approximate data mining for frequent pattern/association rule
-Some algorithms to fast form high quality approxiamte frequent itemsets or association rules from datasets with large scales of transactions or items
+# Frequent pattern/frequent itemset/association rule
+Some algorithms to fast form frequent itemsets/patterns or association rules
 # Transactional dataset
 Dataset used in these implementations all look like the follows
 
@@ -35,3 +35,5 @@ The 'void main()' in bpsohd.cpp contains an example to use it.
 This algorithm firstly reduces the scale of dataset by information granularity, and then, it extracts the approximate frequent patterns from those granules. The method for information granularity is based on the Principle of Justifiable Granularity, whose details can be found in the paper 'Pedrycz W, Homenda W. Building the fundamentals of granular computing: A principle of justifiable granularity[J]. Applied Soft Computing, 2013, 13(10): 4209-4218.'
 
 In this implementation, some modifications are made to improve the performance of the original FI-GF, where the specificity and coverage is designed according to the equation (3) and equation (4) in the paper of Prof. Pedrycz. and the highest value of specificity multiple coverage is detected when its current value is smaller than its last value.
+
+The 'void main()' in figf.cpp contains an example to use it.
