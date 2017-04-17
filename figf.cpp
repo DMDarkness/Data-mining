@@ -4,7 +4,6 @@
 #include <ctype.h>
 #include <algorithm>
 #include <math.h>
-#include <vector>
 
 /**********************************************************************************************************************************************************************************
 File: figf.cpp
@@ -16,7 +15,7 @@ Citation: Zhang Z, Huang J, Wei Y. FI-FG: frequent item sets mining from dataset
 using namespace std;
 
 #pragma warning(disable:4996) 
-#define BUFFER 10000//this code only support those dataset with items less than 10000, the extra items will be ignored
+#define BUFFER 20000//this code only support those dataset with items less than 10000, the extra items will be ignored
 
 double minsup;//minimum support
 double transNum = 0;//the number of transaction
@@ -26,6 +25,8 @@ int Id[BUFFER] = { 0 };//transform Items to BinaryItems
 int BinaryItems[BUFFER] = { 0 };//the binary vector for every item with support higher than minimum support
 int BinaryLen = 0;//the length of BinaryItems
 int tnorm;//the t-norm used to calculate the support of the itemset, 1:minimum t-norm   else: product t-norm
+bool Apri;//1: this algorithm becomes the standard apriori
+int patternNum = 0;
 
 double afa;//the parameter to make the granularity flexible
 
@@ -152,14 +153,14 @@ void Granulation(FILE *fIn)//compress the dataset
 		coverage = Gnum;//calculate the coverage of this granule
 		Col[Gnum - 1] = specificity*coverage;//update the new specificity*coverage
 
-		if (Gnum > 1)//check whether specificity*coverage reaches the highest value
+		if (Gnum > 1 || Apri)//check whether specificity*coverage reaches the highest value
 		{
-			if (Col[Gnum - 1] - Col[Gnum - 2] <= 0 || Gnum >= BUFFER)
+			if (Col[Gnum - 1] - Col[Gnum - 2] <= 0 || Gnum >= BUFFER || Apri)
 			{
 				iMax = 1;
 				for (j = 0; j < BinaryLen; j++)//fuzzylies the granular transaction
 				{
-					gtrans[j] = gtrans[j] / Gnum;
+					gtrans[j] = gtrans[j] / (Gnum);
 				}
 			}
 		}
@@ -189,6 +190,10 @@ void Granulation(FILE *fIn)//compress the dataset
 	{
 		for (j = 0; j < BinaryLen; j++)//fuzzylies the granular transaction
 		{
+			if (Gnum == 0)
+			{
+				Gnum++;
+			}
 			gtrans[j] = gtrans[j] / Gnum;
 		}
 		cGranule->gtrans = gtrans;
@@ -244,23 +249,23 @@ void Apriori()//mining the Granules and output the final results by Apriori
 			{
 				for (sCand=Candidate; sCand!=NULL; sCand=sCand->next)
 				{
-					double s = 1;
+					double sss = 1;
 					for (j = 0; j < BinaryLen; j++)
 					{
 						if (sCand->c[j])
 						{
-							if (s > sGran->gtrans[j] && tnorm==1)
+							if (sss > sGran->gtrans[j] && tnorm==1)
 							{
-								s = sGran->gtrans[j];//the minimum support
+								sss = sGran->gtrans[j];//the minimum support
 							}
 							else
 							{
-								s = s*sGran->gtrans[j];//the product support
+								sss = sss*sGran->gtrans[j];//the product support
 							}
 						}
 						//s = s + sGran->gtrans[j] * Candidate[i][j];//calculate the support of pattern in this granular transaction
 					}
-					sCand->sup = sCand->sup + sGran->num*s;//update the support of pattern
+					sCand->sup = sCand->sup + sGran->num*sss;//update the support of pattern
 				}
 				sGran = sGran->next;//scanning the next granule transaction
 			}
@@ -280,7 +285,7 @@ void Apriori()//mining the Granules and output the final results by Apriori
 							printf("%d ", BinaryItems[j]);
 						}
 					}
-					printf(" gsupport %f\n", sCand->sup);
+					printf(" gsupport %f\n", sCand->sup); patternNum++;
 				}
 			}
 			Candi * newCand = NULL;//the new candidate itemset
@@ -375,9 +380,10 @@ void Apriori()//mining the Granules and output the final results by Apriori
 void main()
 {
 	/*Input the parameter*/
-	minsup = 0.1;//the minimum support
+	minsup = 0.01;//the minimum support
 	afa = 0.01;//the parameter for specificity, the lower of it, the lower importance of specificity
 	tnorm = 2;//the t-norm, 1: minimum t-norm, other: product t-norm
+	Apri = false;//if Apri is true, this algorithm becomes the Apriori
 	FILE *fIn;
 	if (!(fIn = fopen("kosarak.dat", "r")))//input the data for mining
 	{
@@ -388,6 +394,6 @@ void main()
 	PreScan(fIn);//delete those infrequent items
 	Granulation(fIn);//generating those information granules
 	Apriori();//applying Apriori to mine those granules
-	printf("push the return to exit\n");
+	printf("There are %d frequent pattern ooutput \n\n push the return to exit\n",patternNum);
 	getchar();
 }
