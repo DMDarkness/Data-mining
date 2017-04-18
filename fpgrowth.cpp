@@ -1,5 +1,5 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <vector>
@@ -12,7 +12,7 @@ using namespace std;
 #define MAXITEMNUM 200000//the maxinum number of items, items whose indexes higher than it will be ignored
 int Items[MAXITEMNUM]= {0};//the array recording the support of every item
 int itemsize = 0;
-
+int patternNum = 0;
 
 class Node//the node in FPtree
 {
@@ -41,17 +41,56 @@ Node *fpTree;
 double minsup;
 double transNum;
 
-Header *FreItem(FILE *fIn, double minsup)//Scanning the whole dataset once and output the headTable
+class trans
 {
-	char string[BUFFER];
+public:
+	char *str;
+	trans *next;
+	int len = 0;
+	int tid;
+};
+
+trans *Dataset;//the dataset sotred in the memory
+trans *strans = new trans;
+
+void ReadData(FILE *fIn)
+{
+	transNum = 0;
+	int i, j;
+	char str[BUFFER];
+	Dataset = strans;
+	for (i = 0; fgets(str, BUFFER, fIn); i++)//Counting the support of every candidate itemset
+	{
+		if (transNum > 0)
+		{
+			strans->next = new trans;
+			strans = strans->next;
+		}
+		for (j = 0; j < BUFFER && str[j] != '\0'; j++)
+		{
+
+		}
+		strans->str = new char[j+1];
+		strans->len = j+1;
+		memcpy(strans->str, str, (j+1)*sizeof(char));
+		strans->str[j] = '\0';
+		strans->next = NULL;
+		strans->tid = i;
+		transNum++;
+	}
+}
+
+Header *FreItem(double minsup)//Scanning the whole dataset once and output the headTable
+{
 	char * token;
 	int value;
-	transNum = 0;
 	int i;
-	for (i = 0; fgets(string, BUFFER, fIn); i++)//Counting the support of every item
+	char str[BUFFER];
+	for (strans = Dataset; strans != NULL; strans = strans->next)//Counting the support of every item
 	{
-		transNum++;
-		token = strtok(string, " \t\n");
+		memset(str, 0, BUFFER);
+		memcpy(str, strans->str, strans->len);
+		token = strtok(str, " \t\n");
 		while (token != NULL)
 		{
 			if (isdigit(*token))
@@ -111,24 +150,23 @@ bool compare(int a, int b)//the operator to sort items in the transaction
 	return Items[a]>Items[b];   
 }
 
-Node* FPtree(FILE *fIn, Header *Head)//Build FP-tree
+Node* FPtree(Header *Head)//Build FP-tree
 {
-	rewind(fIn);//reset the fIn to the begin of file
+	//rewind(fIn);//reset the fIn to the begin of file
 	Node *Tree;//The head of fp-tree
 	Tree = new Node;
 	Tree->num = -1;
 	Tree->value = -1;
 	Tree->parent = NULL;
 	//Tree->sonNum = 0;
-	char string[BUFFER];
 	char * token;
 	int value;
-	int i,j,m,shnum;
-	for (i = 0; fgets(string, BUFFER, fIn); i++)
+	int j,m,shnum;
+	for (strans = Dataset; strans != NULL; strans = strans->next)
 	{
 		int trans[BUFFER] = {0};
 		j = 0;
-		token = strtok(string, " \t\n");
+		token = strtok(strans->str, " \t\n");
 		while (token != NULL)//read the transaction and put it into an array
 		{
 			if (isdigit(*token))
@@ -326,7 +364,7 @@ void FPgrowth(Node *Tree, Header *Head, double minsup, int itemset[BUFFER],int l
 		{
 			printf("%d ", beta[i]);
 		}
-		printf("support %d\n", sH->num);
+		printf("support %d\n", sH->num); patternNum++;
 		Header *sHead;
 		sHead = condFreItem(sH, minsup);//building the headtable of the conditional basis
 		Node *sTree;
@@ -336,17 +374,33 @@ void FPgrowth(Node *Tree, Header *Head, double minsup, int itemset[BUFFER],int l
 	}
 }
 
-void main()
+int main(int argc, char** argv)
 {
-	minsup = 0.03;//setting the minimum support
 	FILE *fIn;
-	if(!(fIn = fopen("kosarak.dat", "r")))//input the data for mining
+	if (argc != 3)
+	{
+		printf("Usage: fpgrowth <input-filename> <minimum-support>\n");
+	}
+	else if (!(fIn = fopen(argv[1], "r")))
 	{
 		printf("Error in input file\n");
 	}
-	fphead = FreItem(fIn, minsup);//scanning the dataset and find those items with supports higher than minsup
-	fpTree = FPtree(fIn, fphead);//building fp-tree
-	int itemset[BUFFER] = { 0 };
-	int len = 0;
-	FPgrowth(fpTree, fphead, minsup, itemset,len);//mining the freqeunt itemsets
+	else if (atof(argv[2]) < 0)
+	{
+		printf("invalid minimum support");
+	}
+	else
+	{
+		minsup = atof(argv[2]);//setting the minimum support
+		ReadData(fIn);//put the data into the memory
+		fphead = FreItem(minsup);//scanning the dataset and find those items with supports higher than minsup
+		fpTree = FPtree(fphead);//building fp-tree
+		int itemset[BUFFER] = { 0 };
+		int len = 0;
+		FPgrowth(fpTree, fphead, minsup, itemset, len);//mining the freqeunt itemsets
+		printf("\n%d patterns are output\n", patternNum);
+	}
+	printf("\npush return to exit\n");
+	getchar();
+	return 0;
 }
