@@ -39,7 +39,7 @@ Usage: `bpsohd <input-filename> <minimum-support> <population-size> <generation-
 
 Example: `bpsohd kosarak.dat 0.00001 20 30 0.5 1 1 20`
 
-`<length>` is the minimum length of the patterns going to be extracted out.
+`<length>`: the minimum length of the patterns going to be extracted out.
 
 # FIGF: frequent itemsets mining through granular computing (GrC) and fuzzy theory
 'figf.cpp' is an implementation of the algorithm, called FI-GF, proposed in my paper, 'Zhang Z, Huang J, Wei Y. FI-FG: frequent item sets mining from datasets with high number of transactions by granular computing and fuzzy set theory[J]. Mathematical Problems in Engineering, 2015, 2015.', which can be found at http://downloads.hindawi.com/journals/mpe/2015/623240.pdf.
@@ -50,4 +50,16 @@ In this implementation, some modifications are made to improve the performance o
 
 Furthermore, instead of using the t-norm designed in the paper of FI-GF, we use the minimum t-norm and product t-norm in this implementation.
 
-The 'void main()' in 'figf.cpp' contains an example to use it.
+Usage: `figf <is-Apriori-or-not> <input-filename> <minimum-support> <alpha> <t-norm>`
+
+Example: `figf 0 kosarak.dat 0.01 0.01 2`
+
+`is-Apriori-or-not`: An `int` value, if it is higher than 0, the `figf` becomes Apriori.
+
+`input-filename`: A `char*` value, the file name of the transactional data.
+
+`minimum-support`: A `double` value, the minimum support. If it is 0.01, the minimum support is 1%.
+
+`alpha`: A `double` value, the parameter to control the importance of specificity.
+
+`t-norm`: A `int` value, 1: minimum t-norm, other value: product t-norm
