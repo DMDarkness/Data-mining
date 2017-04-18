@@ -377,23 +377,48 @@ void Apriori()//mining the Granules and output the final results by Apriori
 	}
 }
 
-void main()
+int main(int argc, char** argv)
 {
-	/*Input the parameter*/
-	minsup = 0.01;//the minimum support
-	afa = 0.01;//the parameter for specificity, the lower of it, the lower importance of specificity
-	tnorm = 2;//the t-norm, 1: minimum t-norm, other: product t-norm
-	Apri = false;//if Apri is true, this algorithm becomes the Apriori
 	FILE *fIn;
-	if (!(fIn = fopen("kosarak.dat", "r")))//input the data for mining
+	if (argc != 6)
 	{
-		printf("Error in input file. The test data is kosarak.dat, and it can obtained from http://fimi.ua.ac.be/data/. \n");
+		printf("Usage: figf <is-Apriori-or-not> <input-filename> <minimum-support> <alpha> <t-norm>\n");
 	}
-	/*Input the parameter completed*/
-
-	PreScan(fIn);//delete those infrequent items
-	Granulation(fIn);//generating those information granules
-	Apriori();//applying Apriori to mine those granules
-	printf("There are %d frequent pattern ooutput \n\n push the return to exit\n",patternNum);
+	else if (!(fIn = fopen(argv[2], "r")))
+	{
+		printf("Error in input file\n");
+	}
+	else if (atof(argv[3]) < 0)
+	{
+		printf("invalid minimum support");
+	}
+	else if (atof(argv[4]) < 0)
+	{
+		printf("invalid alpha");
+	}
+	else if (atoi(argv[5]) < 0)
+	{
+		printf("invalid t-norm");
+	}
+	else
+	{
+		minsup = atof(argv[3]);//the minimum support
+		afa = atof(argv[4]);//the parameter for specificity, the lower of it, the lower importance of specificity
+		tnorm = atoi(argv[5]);//the t-norm, 1: minimum t-norm, other: product t-norm
+		if (atoi(argv[1]) > 0)//if Apri>0, this algorithm becomes the Apriori
+		{
+			Apri = true;
+		}
+		else
+		{
+			Apri = false;
+		}
+		PreScan(fIn);//delete those infrequent items
+		Granulation(fIn);//generating those information granules
+		Apriori();//applying Apriori to mine those granules
+		printf("\n%d patterns are output\n", patternNum);
+	}
+	printf("\npush the return to exit\n");
 	getchar();
+	return 0;
 }
