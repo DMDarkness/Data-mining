@@ -25,7 +25,7 @@ Usage: `fpgrowth <input-filename> <minimum-support>`
 
 Example: `fpgrowth kosarak.dat 0.01`
 
-kosarak.dat is the transactional dataset and 0.01 is the minimum support, which means 1%.
+`kosarak.dat` is the transactional dataset and `0.01` is the minimum support, which means 1%.
 # Apriori
 Apriori is also a common used algorithm to form frequent pattern. In 'figf.cpp', there is a parameter 'Apri'. If 'Apri' is set to 'true', 'figf.cpp' becomes an implementation of Apriori, and the function 'void mian()' contains an example to use it.
 # BPSOHD: binary particle swarm optimization (PSO) for mining dataset with high dimension
