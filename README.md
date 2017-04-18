@@ -39,6 +39,8 @@ Usage: `bpsohd <input-filename> <minimum-support> <population-size> <generation-
 
 Example: `bpsohd kosarak.dat 0.00001 20 30 0.5 1 1 20`
 
+`<length>` is the minimum length of the patterns going to be extracted out.
+
 # FIGF: frequent itemsets mining through granular computing (GrC) and fuzzy theory
 'figf.cpp' is an implementation of the algorithm, called FI-GF, proposed in my paper, 'Zhang Z, Huang J, Wei Y. FI-FG: frequent item sets mining from datasets with high number of transactions by granular computing and fuzzy set theory[J]. Mathematical Problems in Engineering, 2015, 2015.', which can be found at http://downloads.hindawi.com/journals/mpe/2015/623240.pdf.
 
