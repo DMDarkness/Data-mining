@@ -35,7 +35,10 @@ BPSO-HD is proposed in my paper, 'Zhang Z, Huang J, Wei Y. Frequent item sets mi
 
 The original BPSO-HD outputs the top-k long patterns by running k times. This implementation only runs BPSO-HD once, and outputs any pattern, which has been detected by at least one particle, with support higher than the minimum support.
 
-The 'void main()' in bpsohd.cpp contains an example to use it.
+Usage: `bpsohd <input-filename> <minimum-support> <population-size> <generation-number> <inertia-weight> <acceleration-1> <acceleration-2> <length>`
+
+Example: `bpsohd kosarak.dat 0.00001 20 30 0.5 1 1 20`
+
 # FIGF: frequent itemsets mining through granular computing (GrC) and fuzzy theory
 'figf.cpp' is an implementation of the algorithm, called FI-GF, proposed in my paper, 'Zhang Z, Huang J, Wei Y. FI-FG: frequent item sets mining from datasets with high number of transactions by granular computing and fuzzy set theory[J]. Mathematical Problems in Engineering, 2015, 2015.', which can be found at http://downloads.hindawi.com/journals/mpe/2015/623240.pdf.
 
