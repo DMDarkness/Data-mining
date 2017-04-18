@@ -55,7 +55,21 @@ Usage: `bpsohd <input-filename> <minimum-support> <population-size> <generation-
 
 Example: `bpsohd kosarak.dat 0.00001 20 30 0.5 1 1 20`
 
-`<length>`: the minimum length of the patterns going to be extracted out.
+1. `<input-filename>`:    A `char*` value, the file name of the transactional data.
+
+2. `<minimum-support>`:   A `double` value, the minimum support. If it is 0.01, the minimum support is 1%.
+
+3. `<population-size>`:   An `int` value, the population size of PSO.
+
+4. `<generation-number>`: An `int` value, the number of generation of PSO.
+
+5. `<inertia-weight>`:    A `double` value, the inertia weight of PSO.
+
+6. `<acceleration-1>`:    A `double` value, the first acceleration of PSO.
+
+7. `<acceleration-2>`:    A `double` value, the second acceleration of PSO.
+
+8. `<length>`:            A `int` value, the minimum length of the patterns going to be extracted out.
 
 # FIGF: frequent itemsets mining through granular computing (GrC) and fuzzy theory
 'figf.cpp' is an implementation of the algorithm, called FI-GF, proposed in my paper, 'Zhang Z, Huang J, Wei Y. FI-FG: frequent item sets mining from datasets with high number of transactions by granular computing and fuzzy set theory[J]. Mathematical Problems in Engineering, 2015, 2015.', which can be found at http://downloads.hindawi.com/journals/mpe/2015/623240.pdf.
