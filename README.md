@@ -27,7 +27,21 @@ Example: `fpgrowth kosarak.dat 0.01`
 
 `kosarak.dat` is the transactional dataset and `0.01` is the minimum support, which means 1%.
 # Apriori
-Apriori is also a common used algorithm to form frequent pattern. In 'figf.cpp', there is a parameter 'Apri'. If 'Apri' is set to 'true', 'figf.cpp' becomes an implementation of Apriori, and the function 'void mian()' contains an example to use it.
+Apriori is also a common used algorithm to form frequent pattern. In 'figf.cpp', there is a parameter 'Apri'. If 'Apri' is set to 'true', 'figf.cpp' becomes an implementation of Apriori.
+
+Usage: `figf <is-Apriori-or-not> <input-filename> <minimum-support> <alpha> <t-norm>`
+
+Example: `figf 1 kosarak.dat 0.01 0.01 2`
+
+`is-Apriori-or-not`: An `int` value, if it is higher than 0, the `figf` becomes Apriori. If it is higher than 0, the input of `alpha` and `t-norm` will not affect the algorithm.
+
+`input-filename`: A `char*` value, the file name of the transactional data.
+
+`minimum-support`: A `double` value, the minimum support. If it is 0.01, the minimum support is 1%.
+
+`alpha`: A `double` value, the parameter to control the importance of specificity.
+
+`t-norm`: An `int` value, 1: minimum t-norm, other value: product t-norm
 # BPSOHD: binary particle swarm optimization (PSO) for mining dataset with high dimension
 This algorithm, called BPSO-HD, is designed for mining long patterns from dataset with high number of items. The file 'bpsohd.cpp' is an implementation of it.
 
@@ -54,7 +68,7 @@ Usage: `figf <is-Apriori-or-not> <input-filename> <minimum-support> <alpha> <t-n
 
 Example: `figf 0 kosarak.dat 0.01 0.01 2`
 
-`is-Apriori-or-not`: An `int` value, if it is higher than 0, the `figf` becomes Apriori.
+`is-Apriori-or-not`: An `int` value, if it is higher than 0, the `figf` becomes Apriori. If it is higher than 0, the input of `alpha` and `t-norm` will not affect the algorithm.
 
 `input-filename`: A `char*` value, the file name of the transactional data.
 
@@ -62,4 +76,4 @@ Example: `figf 0 kosarak.dat 0.01 0.01 2`
 
 `alpha`: A `double` value, the parameter to control the importance of specificity.
 
-`t-norm`: A `int` value, 1: minimum t-norm, other value: product t-norm
+`t-norm`: An `int` value, 1: minimum t-norm, other value: product t-norm
