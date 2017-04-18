@@ -21,9 +21,9 @@ The test dataset in these implementations is 'kosarak.dat', which is a common us
 # FP-growth
 FP-growth is a common used and classical algorithm to form frequent pattern from transactional dataset. 'fpgrowth.cpp' is an implementation done by me.
 
-Usage: fpgrowth <input-filename> <minimum-support>
+Usage: `fpgrowth <input-filename> <minimum-support>`
 
-Example: fpgrowth kosarak.dat 0.01
+Example: `fpgrowth kosarak.dat 0.01`
 
 kosarak.dat is the transactional dataset and 0.01 is the minimum support, which means 1%.
 # Apriori
