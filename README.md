@@ -18,7 +18,9 @@ Dataset used in these implementations all look like the follows
 Every row is a transaction, which contains some items, where any item is represented by an integer.
 
 The test dataset in these implementations is 'kosarak.dat', which is a common used dataset to test frequent pattern mining algorithms, and can be obtained from http://fimi.ua.ac.be/data/.
-# FP-growth
+# Basic algorithms
+Some algorithms which are commonly used
+## FP-growth
 FP-growth is a common used and classical algorithm to form frequent pattern from transactional dataset. 'fpgrowth.cpp' is an implementation done by me.
 
 Usage: `fpgrowth <input-filename> <minimum-support>`
@@ -28,7 +30,7 @@ Example: `fpgrowth kosarak.dat 0.01`
 1. `<input-filename>`: A `char*` value, the file name of the transactional data.
 
 2. `<minimum-support>`:A `double` value, the minimum support. If it is 0.01, the minimum support is 1%.
-# Apriori
+## Apriori
 Apriori is also a common used algorithm to form frequent pattern. In 'figf.cpp', there is a parameter 'Apri'. If 'Apri' is set to 'true', 'figf.cpp' becomes an implementation of Apriori.
 
 Usage: `figf <is-Apriori-or-not> <input-filename> <minimum-support> <alpha> <t-norm>`
@@ -44,7 +46,11 @@ Example: `figf 1 kosarak.dat 0.01 0.01 2`
 4. `<alpha>`:              A `double` value, the parameter to control the importance of specificity.
 
 5. `<t-norm>`:             An `int` value, 1: minimum t-norm, other value: product t-norm
-# BPSOHD: binary particle swarm optimization (PSO) for mining dataset with high dimension
+# Evolutionary algorithm
+Some algorithms mining patterns or rules by evolutionary algorithm, which can efficiently extract those patterns or rules with very samll supports. 
+
+For example, if you want to got patterns with length at least 20 in 'kosarak.dat', the minimum support has to be set lower than 0.00003, and based on this minimum support, Apriori becomes extremely slow, and fp-growth also becomes slow and may run out of memory, because the fp-tree will be very large.
+## BPSOHD: binary particle swarm optimization (PSO) for mining dataset with high dimension
 This algorithm, called BPSO-HD, is designed for mining long patterns from dataset with high number of items. The file 'bpsohd.cpp' is an implementation of it.
 
 BPSO-HD is proposed in my paper, 'Zhang Z, Huang J, Wei Y. Frequent item sets mining from high-dimensional dataset based on a novel binary particle swarm optimization[J]. Journal of Central South University, 2016, 23(7): 1700-1708.' This paper can be found at https://link.springer.com/article/10.1007/s11771-016-3224-8.
@@ -70,8 +76,9 @@ Example: `bpsohd kosarak.dat 0.00001 20 30 0.5 1 1 20`
 7. `<acceleration-2>`:    A `double` value, the second acceleration of PSO.
 
 8. `<length>`:            A `int` value, the minimum length of the patterns going to be extracted out.
-
-# FIGF: frequent itemsets mining through granular computing (GrC) and fuzzy theory
+# Data reduction based algorithms
+Some algorithms reduce the scale of dataset first to save the time for scanning.
+## FIGF: frequent itemsets mining through granular computing (GrC) and fuzzy theory
 'figf.cpp' is an implementation of the algorithm, called FI-GF, proposed in my paper, 'Zhang Z, Huang J, Wei Y. FI-FG: frequent item sets mining from datasets with high number of transactions by granular computing and fuzzy set theory[J]. Mathematical Problems in Engineering, 2015, 2015.', which can be found at http://downloads.hindawi.com/journals/mpe/2015/623240.pdf.
 
 This algorithm firstly reduces the scale of dataset by information granularity, and then, it extracts the approximate frequent patterns from those granules. The method for information granularity is based on the Principle of Justifiable Granularity, whose details can be found in the paper 'Pedrycz W, Homenda W. Building the fundamentals of granular computing: A principle of justifiable granularity[J]. Applied Soft Computing, 2013, 13(10): 4209-4218.'
