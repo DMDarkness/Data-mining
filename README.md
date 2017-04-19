@@ -79,7 +79,7 @@ Example: `>bpsohd kosarak.dat 0.00001 20 30 0.5 1 1 20`
 ## ARMGA: Association rules mining by genetic algorithm
 ARMGA is an algorithm mining association rules without setting minimum support, and 'armga.cpp' is an implementation of it. The detail of ARMGA can be found in the paper http://www.sciencedirect.com/science/article/pii/S0957417408000195.
 
-Furthermore, the original outputs the final population. In this implementation, ARMGA outputs any rules, which has been detected, with confidence and lift higher than the minimum confidence and minimum lift.
+Furthermore, the original ARMGA outputs the final population. In this implementation, ARMGA outputs any rules, which has been detected, with confidence and lift higher than the minimum confidence and minimum lift.
 
 Usage: `Usage: armga <input-filename> <minimum-confidence> <minimum-lift> <population size> <generation-number> <mutation-probability> <selection-probability> <crossover-probability> <length>`
 
