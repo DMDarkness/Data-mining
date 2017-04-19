@@ -25,7 +25,7 @@ FP-growth is a common used and classical algorithm to form frequent pattern from
 
 Usage: `fpgrowth <input-filename> <minimum-support>`
 
-Example: `fpgrowth kosarak.dat 0.01`
+Example: `>fpgrowth kosarak.dat 0.01`
 
 1. `<input-filename>`: A `char*` value, the file name of the transactional data.
 
@@ -35,7 +35,7 @@ Apriori is also a common used algorithm to form frequent pattern. In 'figf.cpp',
 
 Usage: `figf <is-Apriori-or-not> <input-filename> <minimum-support> <alpha> <t-norm>`
 
-Example: `figf 1 kosarak.dat 0.01 0.01 2`
+Example: `>figf 1 kosarak.dat 0.01 0.01 2`
 
 1. `<is-Apriori-or-not>`:  An `int` value, if it is higher than 0, the `figf` becomes Apriori. If it is higher than 0, the input of `alpha` and `t-norm` will not affect the algorithm.
 
@@ -50,8 +50,8 @@ Example: `figf 1 kosarak.dat 0.01 0.01 2`
 Some algorithms mining patterns or rules by evolutionary algorithm, which can efficiently extract those patterns or rules with very samll supports. 
 
 For example, if you want to got patterns with length at least 20 in 'kosarak.dat', the minimum support has to be set lower than 0.00003, and based on this minimum support, Apriori becomes extremely slow, and fp-growth also becomes slow and may run out of memory, because the fp-tree will be very large.
-## BPSOHD: binary particle swarm optimization (PSO) for mining dataset with high dimension
-This algorithm, called BPSO-HD, is designed for mining long patterns from dataset with high number of items. The file 'bpsohd.cpp' is an implementation of it.
+## BPSO-HD: binary particle swarm optimization (PSO) for mining dataset with high dimension
+This algorithm is designed for mining long patterns from dataset with high number of items. The file 'bpsohd.cpp' is an implementation of it.
 
 BPSO-HD is proposed in my paper, 'Zhang Z, Huang J, Wei Y. Frequent item sets mining from high-dimensional dataset based on a novel binary particle swarm optimization[J]. Journal of Central South University, 2016, 23(7): 1700-1708.' This paper can be found at https://link.springer.com/article/10.1007/s11771-016-3224-8.
 
@@ -59,7 +59,7 @@ The original BPSO-HD outputs the top-k long patterns by running k times. This im
 
 Usage: `bpsohd <input-filename> <minimum-support> <population-size> <generation-number> <inertia-weight> <acceleration-1> <acceleration-2> <length>`
 
-Example: `bpsohd kosarak.dat 0.00001 20 30 0.5 1 1 20`
+Example: `>bpsohd kosarak.dat 0.00001 20 30 0.5 1 1 20`
 
 1. `<input-filename>`:    A `char*` value, the file name of the transactional data.
 
@@ -76,6 +76,32 @@ Example: `bpsohd kosarak.dat 0.00001 20 30 0.5 1 1 20`
 7. `<acceleration-2>`:    A `double` value, the second acceleration of PSO.
 
 8. `<length>`:            A `int` value, the minimum length of the patterns going to be extracted out.
+## ARMGA: Association rules mining by genetic algorithm
+ARMGA is an algorithm mining association rules without setting minimum support, and 'armga.cpp' is an implementation of it. The detail of ARMGA can be found in the paper http://www.sciencedirect.com/science/article/pii/S0957417408000195.
+
+Furthermore, the original outputs the final population. In this implementation, ARMGA outputs any rules, which has been detected, with confidence and lift higher than the minimum confidence and minimum lift.
+
+Usage: `Usage: armga <input-filename> <minimum-confidence> <minimum-lift> <population size> <generation-number> <mutation-probability> <selection-probability> <crossover-probability> <length>`
+
+Example: `>armga kosarak.dat 0.5 1 20 30 0.3 0.95 0.95 10`
+
+1. `<input-filename>`:    A `char*` value, the file name of the transactional data.
+
+2. `<minimum-confidence>`:   A `double` value, the minimum confidence. If it is 0.5, the minimum support is 50%.
+
+3. `<minimum-lift>`:   A `double` value, the minimum lift.
+
+4. `<population-size>`:   An `int` value, the population size of GA.
+
+5. `<generation-number>`: An `int` value, the number of generation of GA.
+
+6. `<mutation probability>`:    A `double` value, the mutation probability of GA.
+
+7. `<selection probability>`:    A `double` value, the selection probability of GA.
+
+8. `<crossover probability>`:    A `double` value, the crossover probability of GA.
+
+9. `<length>`:            A `int` value, the length of the rules going to be extracted out.
 # Data reduction based algorithms
 Some algorithms reduce the scale of dataset first to save the time for scanning.
 ## FIGF: frequent itemsets mining through granular computing (GrC) and fuzzy theory
@@ -89,7 +115,7 @@ Furthermore, instead of using the t-norm designed in the paper of FI-GF, we use 
 
 Usage: `figf <is-Apriori-or-not> <input-filename> <minimum-support> <alpha> <t-norm>`
 
-Example: `figf 0 kosarak.dat 0.01 0.01 2`
+Example: `>figf 0 kosarak.dat 0.01 0.01 2`
 
 1. `<is-Apriori-or-not>`:  An `int` value, if it is higher than 0, the `figf` becomes Apriori. If it is higher than 0, the input of `alpha` and `t-norm` will not affect the algorithm.
 
