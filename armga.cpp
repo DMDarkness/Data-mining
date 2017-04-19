@@ -483,7 +483,7 @@ int main(int argc, char** argv)
 		sp = atof(argv[7]);
 		cp = atof(argv[8]);
 		length = atoi(argv[9]);
-		if (Popsize % 20 > 0)
+		if (Popsize % 2 > 0)
 		{
 			Popsize++;
 		}
