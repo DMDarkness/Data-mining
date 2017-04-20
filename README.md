@@ -21,7 +21,7 @@ The test dataset in these implementations is 'kosarak.dat', which is a common us
 # Basic algorithms
 Some algorithms which are commonly used
 ## FP-growth
-FP-growth is a common used and classical algorithm to form frequent pattern from transactional dataset. 'fpgrowth.cpp' is an implementation done by me.
+FP-growth is a common used and classical algorithm to form frequent pattern from transactional dataset. `fpgrowth.cpp` is an implementation done by me.
 
 Usage: `fpgrowth <input-filename> <minimum-support>`
 
@@ -31,7 +31,7 @@ Example: `>fpgrowth kosarak.dat 0.01`
 
 2. `<minimum-support>`:A `double` value, the minimum support. If it is 0.01, the minimum support is 1%.
 ## Apriori
-Apriori is also a common used algorithm to form frequent pattern. In 'figf.cpp', there is a parameter 'Apri'. If 'Apri' is set to 'true', 'figf.cpp' becomes an implementation of Apriori.
+Apriori is also a common used algorithm to form frequent pattern. In `figf.cpp`, there is a parameter `Apri`. If `Apri>0`, `figf.cpp` becomes an implementation of Apriori.
 
 Usage: `figf <is-Apriori-or-not> <input-filename> <minimum-support> <alpha> <t-norm>`
 
@@ -51,7 +51,7 @@ Some algorithms mining patterns or rules by evolutionary algorithm, which can ef
 
 For example, if you want to got patterns with length at least 20 in 'kosarak.dat', the minimum support has to be set lower than 0.00003, and based on this minimum support, Apriori becomes extremely slow, and fp-growth also becomes slow and may run out of memory, because the fp-tree will be very large.
 ## BPSO-HD: binary particle swarm optimization (PSO) for mining dataset with high dimension
-This algorithm is designed for mining long patterns from dataset with high number of items. The file 'bpsohd.cpp' is an implementation of it.
+This algorithm is designed for mining long patterns from dataset with high number of items. The file `bpsohd.cpp` is an implementation of it.
 
 BPSO-HD is proposed in my paper, 'Zhang Z, Huang J, Wei Y. Frequent item sets mining from high-dimensional dataset based on a novel binary particle swarm optimization[J]. Journal of Central South University, 2016, 23(7): 1700-1708.' This paper can be found at https://link.springer.com/article/10.1007/s11771-016-3224-8.
 
@@ -75,7 +75,7 @@ Example: `>bpsohd kosarak.dat 0.00001 20 30 0.5 1 1 20`
 
 7. `<acceleration-2>`:    A `double` value, the second acceleration of PSO.
 
-8. `<length>`:            A `int` value, the minimum length of the patterns going to be extracted out.
+8. `<length>`:            An `int` value, the minimum length of the patterns going to be extracted out.
 ## ARMGA: Association rules mining by genetic algorithm
 ARMGA is an algorithm mining association rules without setting minimum support, and 'armga.cpp' is an implementation of it. The detail of ARMGA can be found in the paper http://www.sciencedirect.com/science/article/pii/S0957417408000195.
 
@@ -101,11 +101,11 @@ Example: `>armga kosarak.dat 0.5 1 20 30 0.3 0.95 0.95 10`
 
 8. `<crossover probability>`:    A `double` value, the crossover probability of GA.
 
-9. `<length>`:            A `int` value, the length of the rules going to be extracted out.
+9. `<length>`:            An `int` value, the length of the rules going to be extracted out.
 # Data reduction based algorithms
 Some algorithms reduce the scale of dataset first to save the time for scanning.
 ## FIGF: frequent itemsets mining through granular computing (GrC) and fuzzy theory
-'figf.cpp' is an implementation of the algorithm, called FI-GF, proposed in my paper, 'Zhang Z, Huang J, Wei Y. FI-FG: frequent item sets mining from datasets with high number of transactions by granular computing and fuzzy set theory[J]. Mathematical Problems in Engineering, 2015, 2015.', which can be found at http://downloads.hindawi.com/journals/mpe/2015/623240.pdf.
+`figf.cpp` is an implementation of the algorithm, called FI-GF, proposed in my paper, 'Zhang Z, Huang J, Wei Y. FI-FG: frequent item sets mining from datasets with high number of transactions by granular computing and fuzzy set theory[J]. Mathematical Problems in Engineering, 2015, 2015.', which can be found at http://downloads.hindawi.com/journals/mpe/2015/623240.pdf.
 
 This algorithm firstly reduces the scale of dataset by information granularity, and then, it extracts the approximate frequent patterns from those granules. The method for information granularity is based on the Principle of Justifiable Granularity, whose details can be found in the paper 'Pedrycz W, Homenda W. Building the fundamentals of granular computing: A principle of justifiable granularity[J]. Applied Soft Computing, 2013, 13(10): 4209-4218.'
 
@@ -126,3 +126,19 @@ Example: `>figf 0 kosarak.dat 0.01 0.01 2`
 4. `<alpha>`:              A `double` value, the parameter to control the importance of specificity.
 
 5. `<t-norm>`:             An `int` value, 1: minimum t-norm, other value: product t-norm
+## CLT: Mining frequent itemsets by central limit theorem
+`clt.cpp` is an implementation of the algorithm proposed in https://link.springer.com/chapter/10.1007/978-3-540-30549-1_35?no-access=true. This algorithm use sampling to reduce the scale of dataset. Meanwhile, through taking the central limit theorem, the error of sampling is controlled in a small range with a high probability.
+
+Usage: `clt <input-filename> <minimum-support> <error-range> <max-probabiltiy> <transaction-number>`
+
+Example: `>clt kosarak.dat 0.03 0.005 0.005 990002`
+
+1. `<input-filename>`:    A `char*` value, the file name of the transactional data.
+
+2. `<minimum-support>`:   A `double` value, the minimum support. If it is 0.01, the minimum support is 1%.
+
+3. `<error-range>`:   A `double` value, the error range of the frequency of any pattern caused by sampling, 0.005 means [-0.5%, 0.5%].
+
+4. `<max-probabiltiy>`:   A `double` value, the maximum probability for the error to be out of the error range, 0.005 means 0.5%.
+
+5. `<transaction-number>`:   An `int` value, the number of transactions before sampling.
