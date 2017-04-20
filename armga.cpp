@@ -378,7 +378,7 @@ public:
 	Rule *next;
 };
 
-Rule *fRule=NULL;
+Rule *fRule = new Rule;
 
 void GenerateRules()
 {
@@ -392,20 +392,19 @@ void GenerateRules()
 			memcpy(npat, Pop[i].pat, (length + 1)*sizeof(int));
 			sort(npat+1, npat-npat[0]+1);
 			sort(npat - npat[0] + 1, npat + length+1);
-			for (sRule = fRule; sRule != NULL; sRule = sRule->next)
+			for (sRule = fRule; sRule->pat != NULL; sRule = sRule->next)
 			{
 				if (npat[0] == sRule->pat[0]
-					&& !memcmp(npat+1, sRule->pat+1, -npat[0] * sizeof(int))
+					&& !memcmp(npat + 1, sRule->pat + 1, -npat[0] * sizeof(int))
 					&& !memcmp(npat + 1 - npat[0], sRule->pat + 1 - npat[0], (length + npat[0]) * sizeof(int)))
 				{
 					break;
 				}
 			}
-			if (sRule == NULL)//show the 
+			if (sRule->pat == NULL)//show the rules
 			{
-				sRule = new Rule;
 				sRule->pat = npat;
-				sRule->next = NULL;
+				sRule->next = new Rule;
 				printf("IF ");
 				for (j = 1; j < -npat[0] + 1; j++)
 				{
