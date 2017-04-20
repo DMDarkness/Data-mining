@@ -379,24 +379,22 @@ public:
 };
 
 Rule *fRule = new Rule;
+Rule* sRule;
 
 void GenerateRules()
 {
-	Rule* sRule;
 	int i, j;
-	int* npat = new int[length + 1];
 	for (i = 0; i < Popsize && Pop[i].fitness >= 0; i++)
 	{
 		if (Pop[i].sup3 / Pop[i].sup1 > minconf && Pop[i].sup3 / (Pop[i].sup1*Pop[i].sup2)>minlift)
 		{
+			int* npat = new int[length + 1];
 			memcpy(npat, Pop[i].pat, (length + 1)*sizeof(int));
 			sort(npat+1, npat-npat[0]+1);
 			sort(npat - npat[0] + 1, npat + length+1);
 			for (sRule = fRule; sRule->pat != NULL; sRule = sRule->next)
 			{
-				if (npat[0] == sRule->pat[0]
-					&& !memcmp(npat + 1, sRule->pat + 1, -npat[0] * sizeof(int))
-					&& !memcmp(npat + 1 - npat[0], sRule->pat + 1 - npat[0], (length + npat[0]) * sizeof(int)))
+				if (!memcmp(npat, sRule->pat, (length + 1) * sizeof(int)))
 				{
 					break;
 				}
