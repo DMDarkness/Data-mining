@@ -17,7 +17,7 @@ Dataset used in these implementations all look like the follows
 
 Every row is a transaction, which contains some items, where any item is represented by an integer.
 
-The test dataset in these implementations is 'kosarak.dat', which is a common used dataset to test frequent pattern mining algorithms, and can be obtained from http://fimi.ua.ac.be/data/.
+The test dataset in these implementations is `kosarak.dat`, which is a common used dataset to test frequent pattern mining algorithms, and can be obtained from http://fimi.ua.ac.be/data/.
 # Basic algorithms
 Some algorithms which are commonly used
 ## FP-growth
@@ -49,7 +49,7 @@ Example: `>figf 1 kosarak.dat 0.01 0.01 2`
 # Evolutionary algorithm
 Some algorithms mining patterns or rules by evolutionary algorithm, which can efficiently extract those patterns or rules with very samll supports. 
 
-For example, if you want to got patterns with length at least 20 in 'kosarak.dat', the minimum support has to be set lower than 0.00003, and based on this minimum support, Apriori becomes extremely slow, and fp-growth also becomes slow and may run out of memory, because the fp-tree will be very large.
+For example, if you want to got patterns with length at least 20 in `kosarak.dat`, the minimum support has to be set lower than 0.00003, and based on this minimum support, Apriori becomes extremely slow, and fp-growth also becomes slow and may run out of memory, because the fp-tree will be very large.
 ## BPSO-HD: binary particle swarm optimization (PSO) for mining dataset with high dimension
 This algorithm is designed for mining long patterns from dataset with high number of items. The file `bpsohd.cpp` is an implementation of it.
 
@@ -77,7 +77,7 @@ Example: `>bpsohd kosarak.dat 0.00001 20 30 0.5 1 1 20`
 
 8. `<length>`:            An `int` value, the minimum length of the patterns going to be extracted out.
 ## ARMGA: Association rules mining by genetic algorithm
-ARMGA is an algorithm mining association rules without setting minimum support, and 'armga.cpp' is an implementation of it. The detail of ARMGA can be found in the paper http://www.sciencedirect.com/science/article/pii/S0957417408000195.
+ARMGA is an algorithm mining association rules without setting minimum support, and `armga.cpp` is an implementation of it. The detail of ARMGA can be found in the paper http://www.sciencedirect.com/science/article/pii/S0957417408000195.
 
 Furthermore, the original ARMGA outputs the final population. In this implementation, ARMGA outputs any rules, which has been detected, with confidence and lift higher than the minimum confidence and minimum lift.
 
@@ -127,7 +127,7 @@ Example: `>figf 0 kosarak.dat 0.01 0.01 2`
 
 5. `<t-norm>`:             An `int` value, 1: minimum t-norm, other value: product t-norm
 ## CLT: Mining frequent itemsets by central limit theorem
-`clt.cpp` is an implementation of the algorithm proposed in https://link.springer.com/chapter/10.1007/978-3-540-30549-1_35?no-access=true. This algorithm use sampling to reduce the scale of dataset. Meanwhile, through taking the central limit theorem, the error of sampling is controlled in a small range with a high probability.
+`clt.cpp` is an implementation of the algorithm proposed in https://link.springer.com/chapter/10.1007/978-3-540-30549-1_35?no-access=true. This algorithm uses sampling to reduce the scale of dataset. Meanwhile, through taking the central limit theorem, this algorithm can limit the error caused by sampling in a small range with high probability.
 
 Usage: `clt <input-filename> <minimum-support> <error-range> <max-probabiltiy> <transaction-number>`
 
