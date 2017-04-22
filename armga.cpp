@@ -35,10 +35,18 @@ bool compare(int a, int b)//the operator to sort items in the transaction
 class trans
 {
 public:
-	char *str = NULL;
+	char *str;
 	trans *next;
-	int len = 0;
+	int len;
 	int tid;
+public:
+	trans()
+	{
+		str = NULL;
+		next = NULL;
+		len = 0;
+		tid = 0;
+	}
 };
 
 trans *Dataset;//the dataset sotred in the memory
@@ -110,14 +118,26 @@ void PreScan()
 class chromosome//the structure for a chromosome
 {
 public:
-	int *pat = NULL;
-	double sup1 = 0;
-	double sup2 = 0;
-	double sup3 = 0;
-	double fitness = 0;
-	int tempfit1 = 0;
-	int tempfit2 = 0;
-	int tempfit3 = 0;
+	int *pat;
+	double sup1;
+	double sup2;
+	double sup3;
+	double fitness;
+	int tempfit1;
+	int tempfit2;
+	int tempfit3;
+public:
+	chromosome()
+	{
+		pat = NULL;
+		sup1 = 0;
+		sup2 = 0;
+		sup3 = 0;
+		fitness = 0;
+		tempfit1 = 0;
+		tempfit2 = 0;
+		tempfit3 = 0;
+	}
 };
 
 int mutate(int c, int *pat, double tmp)//doing the mutation operation
@@ -374,8 +394,14 @@ void UpdateFitness()//Updating the fitness of every chromosome
 class Rule//the structure to store rule
 {
 public:
-	int *pat = NULL;
+	int *pat;
 	Rule *next;
+public:
+	Rule()
+	{
+		pat = NULL;
+		next = NULL;
+	}
 };
 
 Rule *fRule = new Rule;
