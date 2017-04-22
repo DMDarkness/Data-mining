@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <vector>
 #include <time.h>
 #include <algorithm>
 
@@ -46,9 +45,18 @@ public:
 	int value;//the value
 	int num;//the number
 	Node *parent;//parent node
-	vector<Node*> Son;
-	//Node *Son[BUFFER];
-	//int sonNum;
+	Node* Son;
+	Node* nextSamePar;
+	Node* nextRight;
+public:
+	Node()
+	{
+		value = 0;
+		num = 0;
+		Son = NULL;
+		nextSamePar = NULL;
+		nextRight = NULL;
+	}
 };
 
 class Header//the data struct of head table
@@ -58,8 +66,18 @@ public:
 	int num;
 	Header *parent;
 	Header *son;
-	Node *Right[BUFFER];//the nodes linked with the head table
+	Node *nextRight;//the nodes linked with the head table
 	int rNum;//the number of nodes linked with the head table
+public:
+	Header()
+	{
+		value = 0;
+		num = 0;
+		rNum = 0;
+		son = NULL;
+		parent = NULL;
+		nextRight = NULL;
+	}
 };
 
 Header *fphead;
@@ -72,8 +90,16 @@ class trans
 public:
 	char *str;
 	trans *next;
-	int len = 0;
+	int len;
 	int tid;
+public:
+	trans()
+	{
+		len = 0;
+		tid = 0;
+		next = NULL;
+		str = NULL;
+	}
 };
 
 trans *Dataset;//the dataset sotred in the memory
@@ -81,9 +107,9 @@ trans *strans = new trans;
 
 void ReadData(FILE *fIn)
 {
-	srand(time(0));
+	srand((int)time(NULL));
 	transNum = 0;
-	int i, j, k;
+	int i, j;
 	char str[BUFFER];
 	Dataset = strans;
 	for (i = 0; fgets(str, BUFFER, fIn); i++)//Counting the support of every candidate itemset
@@ -191,7 +217,7 @@ Node* FPtree(Header *Head)//Build FP-tree
 	//Tree->sonNum = 0;
 	char * token;
 	int value;
-	int j, m, shnum;
+	int j, shnum;
 	for (strans = Dataset; strans != NULL; strans = strans->next)
 	{
 		int trans[BUFFER] = { 0 };
@@ -222,28 +248,48 @@ Node* FPtree(Header *Head)//Build FP-tree
 			{
 				shnum++;
 				int find = 0;
-				for (m = 0; m < Tsearch->Son.size(); m++)//search the son of current node of tree
+				Node *sSon;
+				for (sSon = Tsearch->Son; sSon != NULL; sSon = sSon->nextSamePar)//search the son of current node of tree
 				{
-					if (Tsearch->Son[m]->value == Hsearch->value)//if there is a node whose value is the item
+					if (sSon->value == Hsearch->value)//if there is a node whose value is the item
 					{
-						Tsearch->Son[m]->num++;//its number puls one
+						sSon->num++;//its number puls one
 						find = 1;
-						Tsearch = Tsearch->Son[m];//the current node is changed
+						Tsearch = sSon;//the current node is changed
+						break;
+					}
+					if (sSon->nextSamePar == NULL)
+					{
 						break;
 					}
 				}
 				if (find == 0)//if there is no son of the current node whose value is the item
 				{
-					//Tsearch->sonNum++;													
-					Node *nN = new Node;//build a new son
-					Tsearch->Son.push_back(nN);
-					Tsearch->Son[m]->value = Hsearch->value;
-					Tsearch->Son[m]->num = 1;
+					if (Tsearch->Son == NULL)
+					{
+						Tsearch->Son = new Node;
+						sSon = Tsearch->Son;
+					}
+					else
+					{
+						sSon->nextSamePar = new Node;
+						sSon = sSon->nextSamePar;
+					}
+					sSon->value = Hsearch->value;
+					sSon->num = 1;
 					//Tsearch->Son[m]->sonNum = 0;
-					Tsearch->Son[m]->parent = Tsearch;
+					sSon->parent = Tsearch;
 
-					Tsearch = Tsearch->Son[m];//the current node is changed
-					Hsearch->Right[Hsearch->rNum] = Tsearch;//link this node to the head table
+					Tsearch = sSon;//the current node is changed
+					if (Hsearch->rNum == 0)
+					{
+						Hsearch->nextRight = Tsearch;
+					}
+					else
+					{
+						Tsearch->nextRight = Hsearch->nextRight;
+						Hsearch->nextRight = Tsearch;
+					}
 					Hsearch->rNum++;
 				}
 			}
@@ -259,11 +305,12 @@ Header *condFreItem(Header *sH, double minsup)
 {
 	int i, Num;
 	memset(sItems, 0, sizeof(sItems));
-	for (i = 0; i < sH->rNum; i++)//sH->Right[0],sH->Right[1]....are the conditional basis
+	Node *sNode;
+	for (sNode = sH->nextRight; sNode != NULL; sNode = sNode->nextRight)//sH->Right[0],sH->Right[1]....are the conditional basis
 	{
 		Node *sC;
-		sC = sH->Right[i]->parent;
-		Num = sH->Right[i]->num;
+		sC = sNode->parent;
+		Num = sNode->num;
 		while (sC->value != -1)
 		{
 			sItems[sC->value] = sItems[sC->value] + Num;
@@ -319,12 +366,12 @@ Node* condFPtree(Header *sH, Header *sHead)	//building the conditional fp tree
 	sTree->value = -1;
 	sTree->parent = NULL;
 	//sTree->sonNum = 0;
-	int i, j, m, shnum;
-
-	for (i = 0; i < sH->rNum; i++)
+	int j, shnum;
+	Node *sNode;
+	for (sNode = sH->nextRight; sNode != NULL; sNode = sNode->nextRight)
 	{
 		Node *sC;
-		sC = sH->Right[i]->parent;
+		sC = sNode->parent;
 		int trans[BUFFER] = { 0 };
 		j = 0;
 		while (sC->value != -1)	//store the transaction of conditional basis
@@ -344,28 +391,49 @@ Node* condFPtree(Header *sH, Header *sHead)	//building the conditional fp tree
 			{
 				shnum++;
 				int find = 0;
-				for (m = 0; m < Tsearch->Son.size(); m++)//search the son of current node of tree
+				Node *sSon;
+				for (sSon = Tsearch->Son; sSon != NULL; sSon = sSon->nextSamePar)//search the son of current node of tree
 				{
-					if (Tsearch->Son[m]->value == Hsearch->value)//if there is a node whose value is the item
+					if (sSon->value == Hsearch->value)//if there is a node whose value is the item
 					{
-						Tsearch->Son[m]->num = Tsearch->Son[m]->num + sH->Right[i]->num;//its number puls one
+						sSon->num = sSon->num + sNode->num;//its number puls one
 						find = 1;
-						Tsearch = Tsearch->Son[m];//the current node is changed
+						Tsearch = sSon;//the current node is changed
+						break;
+					}
+					if (sSon->nextSamePar == NULL)
+					{
 						break;
 					}
 				}
 				if (find == 0)//if there is no son of the current node whose value is the item
 				{
-					//Tsearch->sonNum++;
-					Node *nN = new Node;//build a new son
-					Tsearch->Son.push_back(nN);
-					Tsearch->Son[m]->value = Hsearch->value;
-					Tsearch->Son[m]->num = sH->Right[i]->num;
+					if (Tsearch->Son == NULL)
+					{
+						Tsearch->Son = new Node;
+						sSon = Tsearch->Son;
+					}
+					else
+					{
+						sSon->nextSamePar = new Node;
+						sSon = sSon->nextSamePar;
+					}
+					sSon->value = Hsearch->value;
+					sSon->num = sNode->num;
 					//Tsearch->Son[m]->sonNum = 0;
-					Tsearch->Son[m]->parent = Tsearch;
+					sSon->parent = Tsearch;
 
-					Tsearch = Tsearch->Son[m];//the current node is changed
-					Hsearch->Right[Hsearch->rNum] = Tsearch;//link this node to the head table
+					Tsearch = sSon;//the current node is changed
+
+					if (Hsearch->rNum == 0)
+					{
+						Hsearch->nextRight = Tsearch;
+					}
+					else
+					{
+						Tsearch->nextRight = Hsearch->nextRight;
+						Hsearch->nextRight = Tsearch;
+					}
 					Hsearch->rNum++;
 				}
 			}
