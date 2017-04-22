@@ -72,8 +72,15 @@ class Granule
 {
 public:
 	double *gtrans;//the granule
-	int num = 0;//the number of transactions contained by this granule
+	int num;//the number of transactions contained by this granule
 	Granule *next;//the next granule
+public:
+	Granule()
+	{
+		gtrans = NULL;
+		num = 0;
+		next = NULL;
+	}
 };
 
 Granule *Gdataset;//create the granular dataset
@@ -209,7 +216,14 @@ class Candi
 public:
 	bool* c;
 	Candi* next;
-	double sup = 0;
+	double sup;
+public:
+	Candi()
+	{
+		c = NULL;
+		next = NULL;
+		sup = 0;
+	}
 };
 int CandNum = 0;
 
