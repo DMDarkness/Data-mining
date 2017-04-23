@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <vector>
 #include <algorithm>
 
 using namespace std;
@@ -11,14 +10,14 @@ using namespace std;
 #define BUFFER 20000
 #define MAXITEMNUM 20000//the maxinum number of items, items whose indexes higher than it will be ignored
 double Items[MAXITEMNUM]= {0};//the array recording the support of every item
-int itemsize = 0;
-int patternNum = 0;
+long itemsize = 0;
+long patternNum = 0;
 
 class Node//the node in FPtree
 {
 public:
-	int value;//the value
-	int num;//the number
+	long value;//the value
+	long num;//the number
 	Node *parent;//parent node
 	Node* Son;
 	Node* nextSamePar;
@@ -37,12 +36,12 @@ public:
 class Header//the data struct of head table
 {
 public:
-	int value;
+	long value;
 	double num;
 	Header *parent;
 	Header *son;
 	Node *nextRight;//the nodes linked with the head table
-	int rNum;//the number of nodes linked with the head table
+	long rNum;//the number of nodes linked with the head table
 public:
 	Header()
 	{
@@ -65,8 +64,8 @@ class trans
 public:
 	char *str;
 	trans *next;
-	int len;
-	int tid;
+	long len;
+	long tid;
 public:
 	trans()
 	{
@@ -83,7 +82,7 @@ trans *strans = new trans;
 void ReadData(FILE *fIn)
 {
 	transNum = 0;
-	int i, j;
+	long i, j;
 	char str[BUFFER];
 	Dataset = strans;
 	for (i = 0; fgets(str, BUFFER, fIn); i++)//Counting the support of every candidate itemset
@@ -110,8 +109,8 @@ void ReadData(FILE *fIn)
 Header *FreItem(double minsup)//Scanning the whole dataset once and output the headTable
 {
 	char * token;
-	int value;
-	int i;
+	long value;
+	long i;
 	char str[BUFFER];
 	for (strans = Dataset; strans != NULL; strans = strans->next)//Counting the support of every item
 	{
@@ -145,8 +144,8 @@ Header *FreItem(double minsup)//Scanning the whole dataset once and output the h
 
 	for (i = 0; i < itemsize+1; i++)//building the head table
 	{
-		Items[i] = Items[i] + 0.00001*double(i);
-		if (Items[i] >= minsup*transNum)
+		Items[i] = Items[i] + 0.000001*double(i);
+		if (Items[i] >= minsup*transNum && Items[i] >= 1)
 		{
 			Header *Hsearch;
 			Hsearch = Head;
@@ -172,7 +171,7 @@ Header *FreItem(double minsup)//Scanning the whole dataset once and output the h
 	return Head;//Output the headTable
 }
 
-bool compare(int a, int b)//the operator to sort items in the transaction
+bool compare(long a, long b)//the operator to sort items in the transaction
 {
 	if (Items[a] == Items[b])
 	{
@@ -194,11 +193,11 @@ Node* FPtree(Header *Head)//Build FP-tree
 	Tree->parent = NULL;
 	//Tree->sonNum = 0;
 	char * token;
-	int value;
-	int j,shnum;
+	long value;
+	long j,shnum;
 	for (strans = Dataset; strans != NULL; strans = strans->next)
 	{
-		int trans[BUFFER] = {0};
+		long trans[BUFFER] = {0};
 		j = 0;
 		token = strtok(strans->str, " \t\n");
 		while (token != NULL)//read the transaction and put it into an array
@@ -225,7 +224,7 @@ Node* FPtree(Header *Head)//Build FP-tree
 			if (Hsearch->value == trans[shnum])//The item belonging to trans and Head
 			{
 				shnum++;
-				int find = 0;
+				long find = 0;
 				Node *sSon;
 				for (sSon=Tsearch->Son; sSon != NULL; sSon = sSon->nextSamePar)//search the son of current node of tree
 				{
@@ -281,7 +280,7 @@ double sItems[MAXITEMNUM] = { 0 };
 
 Header *condFreItem(Header *sH, double minsup)
 {
-	int i,Num;
+	long i,Num;
 	memset(sItems, 0, sizeof(double)*MAXITEMNUM);
 	Node *sNode;
 	for (sNode = sH->nextRight; sNode!=NULL; sNode = sNode->nextRight)//sH->Right[0],sH->Right[1]....are the conditional basis
@@ -306,7 +305,7 @@ Header *condFreItem(Header *sH, double minsup)
 	for (i = 0; i < itemsize+1; i++)//building the conditional head table
 	{
 		sItems[i] = sItems[i] + 0.00001*double(i);
-		if (sItems[i] >= minsup*transNum)
+		if (sItems[i] >= minsup*transNum && sItems[i] >= 1)
 		{
 			Header *Hsearch;
 			Hsearch = sHead;
@@ -332,7 +331,7 @@ Header *condFreItem(Header *sH, double minsup)
 	return sHead;
 }
 
-bool comparecond(int a, int b)//the operator to sort items in the transaction
+bool comparecond(long a, long b)//the operator to sort items in the transaction
 {
 	if (sItems[a] == sItems[b])
 	{
@@ -352,13 +351,13 @@ Node* condFPtree(Header *sH, Header *sHead)	//building the conditional fp tree
 	sTree->value = -1;
 	sTree->parent = NULL;
 	//sTree->sonNum = 0;
-	int j, shnum;
+	long j, shnum;
 	Node *sNode;
 	for (sNode = sH->nextRight; sNode!=NULL; sNode = sNode->nextRight)
 	{
 		Node *sC;
 		sC = sNode->parent;
-		int trans[BUFFER] = { 0 };
+		long trans[BUFFER] = { 0 };
 		j = 0;
 		while (sC->value != -1)	//store the transaction of conditional basis
 		{
@@ -376,7 +375,7 @@ Node* condFPtree(Header *sH, Header *sHead)	//building the conditional fp tree
 			if (Hsearch->value == trans[shnum])//The item belonging to trans and Head
 			{
 				shnum++;
-				int find = 0;
+				long find = 0;
 				Node *sSon;
 				for (sSon = Tsearch->Son; sSon!=NULL; sSon = sSon->nextSamePar)//search the son of current node of tree
 				{
@@ -429,15 +428,15 @@ Node* condFPtree(Header *sH, Header *sHead)	//building the conditional fp tree
 	return sTree;
 }
 
-void FPgrowth(Node *Tree, Header *Head, double minsup, int itemset[BUFFER],int len)	//mining the frequent itemsets
+void FPgrowth(Node *Tree, Header *Head, double minsup, long itemset[BUFFER],long len)	//mining the frequent itemsets
 {
 	Header *sH;
 	sH = Head->parent;
-	int i;
+	long i;
 	while (sH->value != -1)
 	{
-		int beta[BUFFER] = { 0 };//show the frequent itemsets
-		int length = len;
+		long beta[BUFFER] = { 0 };//show the frequent itemsets
+		long length = len;
 		for (i = 0; i < length; i++)
 		{
 			beta[i] = itemset[i];
@@ -479,8 +478,8 @@ int main(int argc, char** argv)
 		ReadData(fIn);//put the data into the memory
 		fphead = FreItem(minsup);//scanning the dataset and find those items with supports higher than minsup
 		fpTree = FPtree(fphead);//building fp-tree
-		int itemset[BUFFER] = { 0 };
-		int len = 0;
+		long itemset[BUFFER] = { 0 };
+		long len = 0;
 		FPgrowth(fpTree, fphead, minsup, itemset, len);//mining the freqeunt itemsets
 		printf("\n%d patterns are output\n", patternNum);
 	}
