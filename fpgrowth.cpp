@@ -10,7 +10,7 @@ using namespace std;
 #pragma warning(disable:4996) 
 #define BUFFER 20000
 #define MAXITEMNUM 20000//the maxinum number of items, items whose indexes higher than it will be ignored
-int Items[MAXITEMNUM]= {0};//the array recording the support of every item
+double Items[MAXITEMNUM]= {0};//the array recording the support of every item
 int itemsize = 0;
 int patternNum = 0;
 
@@ -38,7 +38,7 @@ class Header//the data struct of head table
 {
 public:
 	int value;
-	int num;
+	double num;
 	Header *parent;
 	Header *son;
 	Node *nextRight;//the nodes linked with the head table
@@ -145,6 +145,7 @@ Header *FreItem(double minsup)//Scanning the whole dataset once and output the h
 
 	for (i = 0; i < itemsize+1; i++)//building the head table
 	{
+		Items[i] = Items[i] + 0.00001*double(i);
 		if (Items[i] >= minsup*transNum)
 		{
 			Header *Hsearch;
@@ -173,7 +174,14 @@ Header *FreItem(double minsup)//Scanning the whole dataset once and output the h
 
 bool compare(int a, int b)//the operator to sort items in the transaction
 {
-	return Items[a]>Items[b];   
+	if (Items[a] == Items[b])
+	{
+		return a > b;
+	}
+	else
+	{
+		return Items[a]>Items[b];
+	}
 }
 
 Node* FPtree(Header *Head)//Build FP-tree
@@ -269,12 +277,12 @@ Node* FPtree(Header *Head)//Build FP-tree
 	return Tree;
 }
 
-int sItems[MAXITEMNUM] = { 0 };
+double sItems[MAXITEMNUM] = { 0 };
 
 Header *condFreItem(Header *sH, double minsup)
 {
 	int i,Num;
-	memset(sItems, 0, sizeof(sItems));
+	memset(sItems, 0, sizeof(double)*MAXITEMNUM);
 	Node *sNode;
 	for (sNode = sH->nextRight; sNode!=NULL; sNode = sNode->nextRight)//sH->Right[0],sH->Right[1]....are the conditional basis
 	{
@@ -297,6 +305,7 @@ Header *condFreItem(Header *sH, double minsup)
 
 	for (i = 0; i < itemsize+1; i++)//building the conditional head table
 	{
+		sItems[i] = sItems[i] + 0.00001*double(i);
 		if (sItems[i] >= minsup*transNum)
 		{
 			Header *Hsearch;
@@ -325,7 +334,14 @@ Header *condFreItem(Header *sH, double minsup)
 
 bool comparecond(int a, int b)//the operator to sort items in the transaction
 {
-	return sItems[a]>sItems[b];
+	if (sItems[a] == sItems[b])
+	{
+		return a > b;
+	}
+	else
+	{
+		return sItems[a]>sItems[b];
+	}
 }
 
 Node* condFPtree(Header *sH, Header *sHead)	//building the conditional fp tree
@@ -432,7 +448,7 @@ void FPgrowth(Node *Tree, Header *Head, double minsup, int itemset[BUFFER],int l
 		{
 			printf("%d ", beta[i]);
 		}
-		printf("support %d\n", sH->num); patternNum++;
+		printf("support %d\n", long(sH->num)); patternNum++;
 		Header *sHead;
 		sHead = condFreItem(sH, minsup);//building the headtable of the conditional basis
 		Node *sTree;
