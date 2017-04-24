@@ -1,5 +1,5 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <algorithm>
@@ -18,39 +18,60 @@ using namespace std;
 #define MAXPOP 500//the maximum of the size of population
 #define pi 3.14159265358979
 
-int Popsize;//the size of population
-int GenNum;//the number of generations
-double omiga, c1, c2;//parameters of PSO
-double minsup;//minimum support
-double transNum = 0;//the number of transaction
-int Items[BUFFER] = { 0 };//the support of every item
-int Itemsort[BUFFER] = { 0 };//sorted items by their support (descend)                 
-int length;//the length of pattern specified by users
-bool validate[BUFFER] = { 0 };//the validate dimension of dataset
-char str[BUFFER];
-int  globali;
-int patternNum = 0;
-
 class Particle//the particle or chromosome
 {
 public:
-	int pat[BUFFER] = { 0 };//the pattern
-	int patLen = 0;
-	double vol[BUFFER] = { 0 };//the speed
+	bool *spat;//the pattern
+	long patLen;
+	double *svol;//the speed
 	double fitness; //the fitness
-	int lbest[BUFFER] = { 0 };//local best solution
-	double lfitness = -1;//local best fitness
-	int lLen = -1;
+	bool *slbest;//local best solution
+	double lfitness;//local best fitness
+	long lLen;
+
+	Particle()
+	{
+		spat = NULL;
+		patLen = 0;
+		svol = NULL;
+		fitness = 0;
+		slbest = NULL;
+		lfitness = -1;
+		lLen = -1;
+	}
+	~Particle()
+	{
+		delete[]spat;
+		delete[]svol;
+		delete[]slbest;
+	}
 };
 
-Particle  Pop[MAXPOP];//the population
-int    Output[BUFFER][BUFFER];//the Patterns which are used to putput
-double   Outsupp[BUFFER];//the supports of the outpur patterns
-int    Patnum = 0;
-int    gbest[BUFFER] = { 0 };//the global best solution
-double   gfitness = -1;//the global best fitness
+class Result
+{
+public:
+	Particle part;
+};
 
-bool compare(int a, int b)//the operator to sort items in the transaction
+long Popsize;//the size of population
+long GenNum;//the number of generations
+double omiga, c1, c2;//parameters of PSO
+double minsup;//minimum support
+double transNum = 0;//the number of transaction
+long *Items;//the support of every item
+long *Itemsort;//sorted items by their support (descend)
+long *ItemIndex;//map Items to Itemsort
+long length;//the length of pattern specified by users
+bool *validate;//the validate dimension of dataset
+long  globali;
+long Psize;
+Particle *Pop;//the population
+Result *Output;
+long    Patnum;
+bool    *gbest;//the global best solution
+double   gfitness;//the global best fitness
+
+bool compare(long a, long b)//the operator to sort items in the transaction
 {
 	return Items[a]>Items[b];
 }
@@ -60,8 +81,8 @@ class trans
 public:
 	char *str;
 	trans *next;
-	int len = 0;
-	int tid;
+	long len = 0;
+	long tid;
 };
 
 trans *Dataset;//the dataset sotred in the memory
@@ -70,8 +91,8 @@ trans *strans = new trans;
 void ReadData(FILE *fIn)
 {
 	transNum = 0;
-	int i, j;
-	char str[BUFFER];
+	long i, j;
+	char str[2*BUFFER];
 	Dataset = strans;
 	for (i = 0; fgets(str, BUFFER, fIn); i++)//Counting the support of every candidate itemset
 	{
@@ -96,14 +117,24 @@ void ReadData(FILE *fIn)
 
 void PreScan()
 {
-	int value;//the variable to record the item in every transaction
-	int i, j;
-	char * token;
+	Patnum = 0;
+	gfitness = -1;
+	Items = new long[BUFFER];
+	validate = new bool[BUFFER];
+	Itemsort = new long[BUFFER];
+	ItemIndex = new long[BUFFER];
+	Pop = new Particle[Popsize];
+	Output = new Result[MAXPOP];
+	memset(Items, 0, BUFFER * sizeof(long));
+	memset(validate, 0, BUFFER * sizeof(bool));
 
+	long i, value;//the variable to record the item in every transaction
+	char * token;
+	char str[2*BUFFER];
 	for (strans = Dataset; strans != NULL; strans = strans->next)//Counting the support of every item
 	{
 		//memset(str, 0, BUFFER);
-		memcpy(str, strans->str, strans->len);
+		memcpy(str, strans->str, strans->len * sizeof(char));
 		token = strtok(str, " \t\n");
 		while (token != NULL)
 		{
@@ -124,12 +155,16 @@ void PreScan()
 		Itemsort[i] = i;
 	}
 	sort(Itemsort, Itemsort + BUFFER, compare);//sort the Items through the support (descend)
+	for (i = 0; i < BUFFER; i++)
+	{
+		ItemIndex[Itemsort[i]] = i;
+	}
 }
 
 void Generate()//initialize the population
 {
-	int Psize = 0;//the variable to record the number of frequent items
-	int i, j;
+	Psize = 0;//the variable to record the number of frequent items
+	long i, j;
 	for (i = 0; i < BUFFER; i++)//delete those items whose supports are lower than minimum support
 	{
 		if (Items[i] >= minsup*transNum)//if the support of this item is higher than minimum support           
@@ -142,29 +177,34 @@ void Generate()//initialize the population
 			Items[i] = 0;//for those infrequent items, their supports are set to 0
 		}
 	}
+	gbest = new bool[Psize];
 	for (i = 0; i < Popsize; i++)//initial the population
 	{
-		Particle pati;//generate a new particle
-		for (j = 0; j < BUFFER; j++)//for all the items
+		//generate a new particle
+		Pop[i].spat = new bool[Psize];
+		memset(Pop[i].spat, false, Psize * sizeof(bool));
+		Pop[i].svol = new double[Psize];
+		memset(Pop[i].svol, 0, Psize * sizeof(double));
+		Pop[i].slbest = new bool[Psize];
+		memset(Pop[i].slbest, false, Psize * sizeof(bool));
+		for (j = 0; j < Psize; j++)//for all the items
 		{
-			if (validate[j] > 0 && (rand() % 2)>0)//if this item is remained
+			if (rand() % 2)//if this item is remained
 			{
-				pati.pat[j] = 1;//randomly decide whether it is contained in the particle
-				pati.patLen++;
+				Pop[i].spat[j] = true;//randomly decide whether it is contained in the particle
+				Pop[i].patLen++;
 			}
 		}
-		Pop[i] = pati;
 	}
-
 	for (i = 0; i < Popsize; i++)//prune the initial population, to make sure that half of the initial population have not too bad fitness
 	{
-		if (i < 1 + Popsize*0.8)//if this particle belonging to the first half of particles
+		if (i < 1 + Popsize*0.9)//if this particle belonging to the first half of particles
 		{
-			for (j = 0; Pop[i].patLen>length; j++)//when its length is higher than the minimum length specified by users
+			for (j = 0; Pop[i].patLen>length && j<Psize; j++)//when its length is higher than the minimum length specified by users
 			{
-				if (Pop[i].pat[Itemsort[Psize - 1 - j]] == 1)//for every item whose support is not very high, if it is contained by this particle
+				if (Pop[i].spat[Psize - 1 - j] == 1)//for every item whose support is not very high, if it is contained by this particle
 				{
-					Pop[i].pat[Itemsort[Psize - 1 - j]] = 0;//remove it
+					Pop[i].spat[Psize - 1 - j] = 0;//remove it
 					Pop[i].patLen = Pop[i].patLen - 1;//the length of this particle minus one
 				}
 			}
@@ -175,26 +215,26 @@ void Generate()//initialize the population
 void UpdateResults()//Update the fitness, local best solution and the global best solution
 {
 	//rewind(fIn);
-	int value;
-	int i, j, m, transdsize;
+	long value;
+	long i, j, m, transdsize;
 	char * token;
 	for (i = 0; i < Popsize; i++)//reset the fitness of all the particle
 	{
 		Pop[i].fitness = 0;
 	}
+	char str[2*BUFFER];
 	for (strans = Dataset; strans != NULL; strans = strans->next)//scanning the dataset to update the fitness of all the particle           
 	{
-		//memset(str, 0, BUFFER);
-		memcpy(str, strans->str, strans->len);
+		memcpy(str, strans->str, strans->len * sizeof(char));
 		token = strtok(str, " \t\n");
-		int trans[BUFFER] = { 0 };//store the transaction to a vector trans
+		long trans[BUFFER] = { 0 };//store the transaction to a vector trans
 		j = 0;
 		while (token != NULL)
 		{
 			if (isdigit(*token))
 			{
 				value = atoi(token);
-				if (value < BUFFER && validate[value]>0)
+				if (value < BUFFER && validate[value])
 				{
 					trans[j] = value;
 					j++;
@@ -205,10 +245,10 @@ void UpdateResults()//Update the fitness, local best solution and the global bes
 		transdsize = j;
 		for (j = 0; j < Popsize; j++)//for every particle
 		{
-			int exit = 0;
+			long exit = 0;
 			for (m = 0; m < transdsize; m++)
 			{
-				exit = exit + Pop[j].pat[trans[m]];//counting the items in both trans and particle
+				exit = exit + Pop[j].spat[ItemIndex[trans[m]]];//counting the items in both trans and particle
 			}
 			if (exit == Pop[j].patLen)//if the trans contains the particle
 			{
@@ -225,31 +265,23 @@ void UpdateResults()//Update the fitness, local best solution and the global bes
 		if (Pop[i].fitness >= Pop[i].lfitness)//Update local best solution
 		{
 			Pop[i].lfitness = Pop[i].fitness;
-			//for (j = 0; j < BUFFER; j++)
-			//{
-			//	Pop[i].lbest[j] = Pop[i].pat[j];
-			//}
-			memcpy(Pop[i].lbest, Pop[i].pat, BUFFER);
+			memcpy(Pop[i].slbest, Pop[i].spat, Psize*sizeof(bool));
 			Pop[i].lLen = Pop[i].patLen;
 		}
 		if (Pop[i].fitness >= gfitness)//Update global best solution
 		{
 			gfitness = Pop[i].fitness;
-			//for (j = 0; j < BUFFER; j++)
-			//{
-			//	gbest[j] = Pop[i].pat[j];
-			//}
-			memcpy(gbest, Pop[i].pat, BUFFER);
+			memcpy(gbest, Pop[i].spat, Psize*sizeof(bool));
 		}
 		if (Pop[i].fitness >= minsup*transNum)//Put the pattern into the final solution
 		{
-			int exit = 0;
-			for (m = 0; m < Patnum; m++)
+			bool exit = false;
+			for (m = 0; m < Patnum && !exit; m++)
 			{
-				int equal = 0;
-				for (j = 0; j < BUFFER; j++)
+				long equal = 0;
+				for (j = 0; j < Psize; j++)
 				{
-					if (Pop[i].pat[j] == Output[m][j])
+					if (Pop[i].spat[j] == Output[m].part.spat[j])
 					{
 						equal++;
 					}
@@ -257,19 +289,20 @@ void UpdateResults()//Update the fitness, local best solution and the global bes
 					{
 						break;
 					}
-					if (equal == BUFFER)
+					if (equal == Psize)
 					{
-						exit = 1;
+						exit = true;
 						break;
 					}
 				}
 			}
-			if (exit == 0)
+			if (!exit)
 			{
-				for (j = 0; j < BUFFER; j++)
+				Output[m].part.spat = new bool[Psize];
+				for (j = 0; j < Psize; j++)
 				{
-					Output[Patnum][j] = Pop[i].pat[j];
-					Outsupp[Patnum] = Pop[i].fitness;
+					Output[m].part.spat[j] = Pop[i].spat[j];
+					Output[m].part.fitness = Pop[i].fitness;
 				}
 				Patnum++;
 			}
@@ -279,20 +312,20 @@ void UpdateResults()//Update the fitness, local best solution and the global bes
 
 void Reduce()//reduce the dimenision of the dataset
 {
-	int i, j;
-	for (i = 0; i < BUFFER; i++)
+	long i, j;
+	for (i = 0; i < Psize; i++)
 	{
-		if (Items[i] < gfitness)
+		if (Items[Itemsort[i]] < gfitness)
 		{
-			validate[i] = 0;
+			validate[Itemsort[i]] = 0;
 			for (j = 0; j < Popsize; j++)
 			{
-				if (Pop[j].pat[i] > 0)
+				if (Pop[j].spat[i])
 				{
-					Pop[j].pat[i] = 0;
+					Pop[j].spat[i] = 0;
 					Pop[j].patLen--;
 				}
-				Pop[j].vol[i] = 0;
+				Pop[j].svol[i] = 0;
 			}
 		}
 	}
@@ -300,23 +333,23 @@ void Reduce()//reduce the dimenision of the dataset
 
 void UpdatePos()//Update the position of particles
 {
-	int i, j;
+	long i, j;
 	double r1, r2, r, V;
 	for (i = 0; i < Popsize; i++)
 	{
 		r1 = (rand() % 100) / 100.0;
 		r2 = (rand() % 100) / 100.0;
-		for (j = 0; j < BUFFER; j++)
+		for (j = 0; j < Psize; j++)
 		{
-			Pop[i].vol[j] = omiga*Pop[i].vol[j]
-				+ r1*c1*(Pop[i].lbest[j] - Pop[i].pat[j])
-				+ r2*c2*(gbest[j] - Pop[i].pat[j]);//Update the speed of every particle
-			V = abs((2 / pi)*atan(pi*Pop[i].vol[j] / 2.0));//the V shape function
+			Pop[i].svol[j] = omiga*Pop[i].svol[j]
+				+ r1*c1*(Pop[i].slbest[j] - Pop[i].spat[j])
+				+ r2*c2*(gbest[j] - Pop[i].spat[j]);//Update the speed of every particle
+			V = abs((2 / pi)*atan(pi*Pop[i].svol[j] / 2.0));//the V shape function
 			r = (rand() % 100) / 100.0;
-			if (r < V && validate[j]>0)
+			if (r < V && validate[Itemsort[j]])
 			{
-				Pop[i].pat[j] = 1 - Pop[i].pat[j];
-				if (Pop[i].pat[j] == 1)
+				Pop[i].spat[j] = !(Pop[i].spat[j]);
+				if (Pop[i].spat[j] == 1)
 				{
 					Pop[i].patLen++;
 				}
@@ -339,18 +372,17 @@ void Mining()
 		Reduce();
 		printf("generation %d is completed\n", globali + 1);
 	}
-	int i, j;
-	for (i = 0; i < Patnum; i++)//show the final results
+	long i, j;
+	for (i = 0 ; i < Patnum; i++)//show the final results
 	{
-		for (j = 0; j < BUFFER; j++)
+		for (j = 0; j < Psize; j++)
 		{
-			if (Output[i][j] > 0)
+			if (Output[i].part.spat[j])
 			{
-				printf("%d ", j);
+				printf("%d ", Itemsort[j]);
 			}
 		}
-		printf("support %f\n", Outsupp[i]);
-		patternNum++;
+		printf("support %f\n", Output[i].part.fitness);
 	}
 }
 
@@ -401,9 +433,15 @@ int main(int argc, char** argv)
 		ReadData(fIn);
 		PreScan();
 		Mining();
-		printf("\n%d patterns are output\n", patternNum);
+		printf("\n%d patterns are output\n", Patnum);
 	}
 	printf("push retrun to exit");
 	getchar();
+	delete []Items;
+	delete []validate;
+	delete []Itemsort;
+	delete []ItemIndex;
+	delete []Pop;
+	delete []Output;
 	return 0;
 }
