@@ -12,8 +12,8 @@ Every single `.cpp`, except for those file with prefix `py`, can be compiled to 
 5. CLT: `clt.cpp` is an implementation, which is a Central Limit Theorem based algorithm mining frequent patterns.
 # For Python 2.7
 ## Usage
-Any `.pyd` and can be put in the working directory and be imported by Python. The details of usage can be found by the `help` of Python after importing.
+Any `.pyd` and can be put in the working directory and be imported by Python. The details of usage can be found in `PythonExample.py`.
 ## Algorithms
-1. FP-Growth: `pyfpgrowth.pyd` is the corresponding `.pyd`, and `PythonExample.py` contains an example.
-2. BPSO-HD: `pybpsohd.pyd` is the corresponding `.pyd`, and `PythonExample.py` contains an example.
-3. CLT: `pyclt.pyd` is the corresponding `.pyd`, and `PythonExample.py` contains an example.
+1. FP-Growth: `pyfpgrowth.pyd` is the corresponding `.pyd`.
+2. BPSO-HD: A BPSO based algorithm mining long frequent patterns. `pybpsohd.pyd` is the corresponding `.pyd`.
+3. CLT: A Central Limit Theorem based algorithm mining frequent patterns. `pyclt.pyd` is the corresponding `.pyd`.
