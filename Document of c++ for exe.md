@@ -137,7 +137,7 @@ Example: `>clt kosarak.dat 0.03 0.005 0.005 990002`
 
 2. `<minimum-support>`:   A `double` value, the minimum support. If it is 0.01, the minimum support is 1%.
 
-3. `<error-range>`:   A `double` value, the error range of the frequency of any pattern caused by sampling, 0.005 means [-0.5%, 0.5%].
+3. `<error-range>`:   A `double` value, the maximum range of the deviation of frequency of any pattern caused by sampling, 0.005 means [-0.5%, 0.5%].
 
 4. `<max-probabiltiy>`:   A `double` value, the maximum probability for the error to be out of the error range, 0.005 means 0.5%.
 
