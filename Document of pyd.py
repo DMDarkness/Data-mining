@@ -25,8 +25,7 @@ fi=pyfpgrowth.getFP(dataset, 0.1)#the example of pyfpgrowth
 """
 <fps>=pyfpgrowth.getFP(<dataset>,<minsup>)
 Input:
-<dataset>: a list of transactions, where every transaction
-           is list containing integers higher than 0, and
+<dataset>: a list of transactions, where every transaction           is list containing integers higher than 0, and
            every integer represents an item.
 <minsup>:  a double value located in [0, 1], which is the mnimum support
            represented by fraction, where 0.25 represent 25%.
@@ -75,7 +74,7 @@ Input:
 <minsup>:  a double value located in [0, 1], which is the mnimum support
            represented by fraction, where 0.25 represent 25%.
 <er>:      a double value located in [0, 1], the maximum range of deviation
-           of support of any itemsets caused by sampling. 0.01 means that
+           of support of any itemset caused by sampling. 0.01 means that
            the deviation of support of any itemset is limited in [-1%, 1%].
 <prob>:    a double value located in [0, 1], the maximum probability for
            the deviation of support to not be located in [-er, er]. 0.01
