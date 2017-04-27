@@ -12,8 +12,8 @@ Every single `.cpp`, except for those file with prefix `py`, can be compiled to 
 5. CLT: `clt.cpp` is an implementation, which is a Central Limit Theorem based algorithm mining frequent patterns.
 # For Python 2.7
 ## Usage
-Every `.cpp` with prefix `py` can be compiled to a `.dll` file. After changing its name to `.pyd` and putting it in the working directory, you can import it by Python. If you are using the Visual Studio to compile, the `include` and `libs` of `Python27` should be added, and the library `python27.lib` should be added. Note that Python does not support the model of Debug. The details of usage can be found by the `help` of Python after importing.
+Any `.pyd` and can be put in the working directory and be imported by Python. The details of usage can be found by the `help` of Python after importing.
 ## Algorithms
-1. FP-Growth: `pyfpgrowth.cpp` is an implementation, the `pyfpgrowth.pyd` is the corresponding `.pyd`, and `PythonExample.py` contains an example.
-2. BPSO-HD: `pybpsohd.cpp` is an implementation, which is a BPSO based algorithm mining long frequent patterns. The `pybpsohd.pyd` is the corresponding `.pyd`, and `PythonExample.py` contains an example.
-3. CLT: `pyclt.cpp` is an implementation, which is a Central Limit Theorem based algorithm mining frequent patterns. The `pyclt.pyd` is the corresponding `.pyd`, and `PythonExample.py` contains an example.
+1. FP-Growth: `pyfpgrowth.pyd` is the corresponding `.pyd`, and `PythonExample.py` contains an example.
+2. BPSO-HD: `pybpsohd.pyd` is the corresponding `.pyd`, and `PythonExample.py` contains an example.
+3. CLT: `pyclt.pyd` is the corresponding `.pyd`, and `PythonExample.py` contains an example.
