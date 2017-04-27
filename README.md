@@ -3,7 +3,7 @@ Some algorithms to form frequent itemsets/association rules from datasets, where
 # C++ code for exe file
 ## Usage
 Every `.cpp` can be compiled to the `.exe` file, and the details of usage can be found in `Document of c++ for exe.md`.
-##Algorithms
+## Algorithms
 1. FP-Growth: A common used algorithm mining frequent patterns.
 2. BPSO-HD: A BPSO (Binary Particle Swarm Optimization) based algorithm mining long frequent patterns.
 3. CLT: A Central Limit Theorem based algorithm mining frequent patterns.
