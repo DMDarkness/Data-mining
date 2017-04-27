@@ -9,19 +9,19 @@ import pybpsohd#import the module of BPSO-HD
 import pyfpgrowth#import the module of FP-growth
 import pyclt#import the module of Central limit theorem
 
-#The dataset used in this example, which is the first 10 transactions of 'mushroom'
-dataset=[[1, 3, 9, 13, 23, 25, 34, 36, 38, 40, 52, 54, 59, 63, 67, 76, 85, 86, 90, 93, 98, 107, 113]
-, [2, 3, 9, 14, 23, 26, 34, 36, 39, 40, 52, 55, 59, 63, 67, 76, 85, 86, 90, 93, 99, 108, 114]
-, [2, 4, 9, 15, 23, 27, 34, 36, 39, 41, 52, 55, 59, 63, 67, 76, 85, 86, 90, 93, 99, 108, 115]
-, [1, 3, 10, 15, 23, 25, 34, 36, 38, 41, 52, 54, 59, 63, 67, 76, 85, 86, 90, 93, 98, 107, 113]
-, [2, 3, 9, 16, 24, 28, 34, 37, 39, 40, 53, 54, 59, 63, 67, 76, 85, 86, 90, 94, 99, 109, 114]
-, [2, 3, 10, 14, 23, 26, 34, 36, 39, 41, 52, 55, 59, 63, 67, 76, 85, 86, 90, 93, 98, 108, 114]
-, [2, 4, 9, 15, 23, 26, 34, 36, 39, 42, 52, 55, 59, 63, 67, 76, 85, 86, 90, 93, 98, 108, 115]
-, [2, 4, 10, 15, 23, 27, 34, 36, 39, 41, 52, 55, 59, 63, 67, 76, 85, 86, 90, 93, 99, 107, 115]
-, [1, 3, 10, 15, 23, 25, 34, 36, 38, 43, 52, 54, 59, 63, 67, 76, 85, 86, 90, 93, 98, 110, 114]
-, [2, 4, 9, 14, 23, 26, 34, 36, 39, 42, 52, 55, 59, 63, 67, 76, 85, 86, 90, 93, 98, 107, 115]]
+#The dataset used in this example, which is the first 10 transactions of 'kosarak.dat'
+dataset=[[1, 2, 3]
+, [1]
+, [4, 5, 6, 7]
+, [1, 8]
+, [9, 10]
+, [11, 6, 12, 13, 14, 15, 16]
+, [1, 3, 7]
+, [17, 18]
+, [11, 6, 19, 20, 21, 22, 23, 24]
+, [1, 25, 3]]
 
-fi=pyfpgrowth.getFP(dataset, 0.25)#the example of pyfpgrowth
+fi=pyfpgrowth.getFP(dataset, 0.1)#the example of pyfpgrowth
 """
 <fps>=pyfpgrowth.getFP(<dataset>,<minsup>)
 Input:
@@ -37,7 +37,7 @@ Output:
            of this frequent itemsets.
 """
 
-fi2=pybpsohd.getFP(dataset, 0.05, 30, 30, 0.5, 1, 1, 10)#the example of pybpsohd
+fi2=pybpsohd.getFP(dataset, 0.01, 30, 30, 0.5, 1, 1, 2)#the example of pybpsohd
 """
 <fps>=getFP(<dataset>,<minsup>,<Popsize>,<GenNum>,<omiga>,<c1>,<c2>,<length>)
 Input:
@@ -65,7 +65,7 @@ South University, 2016, 23(7): 1700-1708.
 -----------------------------------------------------------------------------------------------           
 """
 
-[fi3, SampleN]=pyclt.getFP(dataset, 0.25, 0.01, 0.01)#the example of central limit theorem based algorithm
+[fi3, SampleN]=pyclt.getFP(dataset, 0.1, 0.01, 0.01)#the example of central limit theorem based algorithm
 """
 [<fps>,<SampleN>]=pyfpgrowth.getFP(<dataset>,<minsup>,<er>,<prob>)
 Input:
@@ -83,7 +83,7 @@ Input:
 Output:
 <fps>:     a list of frequent itemsets, where every frequent
            itemset is also a list, whose last value is the
-           absolute support, and other values are the items
-           of this frequent itemsets.
+           absolute support in the sample, and other values 
+           are the items of this frequent itemsets.
 <SampleN>: the size of sample accorrding to <er> and <prob>           
 """
