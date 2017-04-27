@@ -33,7 +33,7 @@ Output:
 <fps>:     a list of frequent itemsets, where every frequent
            itemset is also a list, whose last value is the
            absolute support, and other values are the items
-           of this frequent itemsets.
+           of this frequent itemset.
 """
 
 fi2=pybpsohd.getFP(dataset, 0.01, 30, 30, 0.5, 1, 1, 2)#the example of pybpsohd
@@ -55,7 +55,7 @@ Output:
 <fps>:     a list of frequent itemsets, where every frequent
            itemset is also a list, whose last value is the
            absolute support, and other values are the items
-           of this frequent itemsets.
+           of this frequent itemset.
 Paper:
 -----------------------------------------------------------------------------------------------          
 Zhang Z, Huang J, Wei Y, et al. Frequent item sets mining from high-dimensional
@@ -83,6 +83,6 @@ Output:
 <fps>:     a list of frequent itemsets, where every frequent
            itemset is also a list, whose last value is the
            absolute support in the sample, and other values 
-           are the items of this frequent itemsets.
+           are the items of this frequent itemset.
 <SampleN>: the size of sample accorrding to <er> and <prob>           
 """
