@@ -17,3 +17,4 @@ Any `.pyd` can be put in the working directory and be imported by Python, which 
 1. FP-Growth: `pyfpgrowth.pyd` is the corresponding `.pyd`.
 2. BPSO-HD: A BPSO (Binary Particle Swarm Optimization) based algorithm mining long frequent patterns. `pybpsohd.pyd` is the corresponding `.pyd`.
 3. CLT: A Central Limit Theorem based algorithm mining frequent patterns. `pyclt.pyd` is the corresponding `.pyd`.
+4. ARMGA: A GA (Genetic Algorithm) based algorithm mining association rules. `pyarmga.pyd` is the corresponding `.pyd`.
