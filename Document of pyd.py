@@ -89,7 +89,7 @@ Output:
 <SampleN>: the size of sample accorrding to <er> and <prob>           
 """
 
-ar=pyarmga.getAR(dataset, 0.5, 1, 20, 20, 0, 2, 1, 1, 2)#the example of ARMGA
+ar=pyarmga.getAR(dataset, 0.5, 1, 20, 20, 0, 1, 1, 2)#the example of ARMGA
 """
 <ars>=getAR(<dataset>,<minconf>,<minlift>,<Popsize>,<GenNum>,<mp>,<sp>,<cp>,<length>)
 Input: 
