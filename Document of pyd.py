@@ -96,7 +96,7 @@ Input:
 <dataset>: the list of transactions to be mined, every 
            transaction is a list containing integer higher than 0.
 <minconf>: double located in [0, 1], the minimum confidence.
-<minlift>: double located in [0, 1], the minimum lift.
+<minlift>: double value higher than 0, the minimum lift.
 <Popsize>: integer higher than 0, the size of population.
 <GenNum>:  integer higher than 0, the number of genertions.
 <mp>:      double located in [0, 1], the mutation probability.
