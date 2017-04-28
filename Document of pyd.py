@@ -8,6 +8,7 @@ Created on Thu Apr 27 16:27:17 2017
 import pybpsohd#import the module of BPSO-HD
 import pyfpgrowth#import the module of FP-growth
 import pyclt#import the module of Central limit theorem
+import pyarmga#import the module of ARMGA
 
 #The dataset used in this example, which is the first 10 transactions of 'kosarak.dat'
 dataset=[[1, 2, 3]
@@ -25,7 +26,8 @@ fi=pyfpgrowth.getFP(dataset, 0.1)#the example of pyfpgrowth
 """
 <fps>=pyfpgrowth.getFP(<dataset>,<minsup>)
 Input:
-<dataset>: a list of transactions, where every transaction           is list containing integers higher than 0, and
+<dataset>: a list of transactions, where every transaction
+           is list containing integers higher than 0, and
            every integer represents an item.
 <minsup>:  a double value located in [0, 1], which is the mnimum support
            represented by fraction, where 0.25 represent 25%.
@@ -85,4 +87,25 @@ Output:
            absolute support in the sample, and other values 
            are the items of this frequent itemset.
 <SampleN>: the size of sample accorrding to <er> and <prob>           
+"""
+
+ar=pyarmga.getAR(dataset, 0.5, 1, 20, 20, 0, 2, 1, 1, 2)#the example of ARMGA
+"""
+<ars>=getAR(<dataset>,<minconf>,<minlift>,<Popsize>,<GenNum>,<mp>,<sp>,<cp>,<length>)
+Input: 
+<dataset>: the list of transactions to be mined, every 
+           transaction is a list containing integer higher than 0.
+<minconf>: double located in [0, 1], the minimum confidence.
+<minlift>: double located in [0, 1], the minimum lift.
+<Popsize>: integer higher than 0, the size of population.
+<GenNum>:  integer higher than 0, the number of genertions.
+<mp>:      double located in [0, 1], the mutation probability.
+<sp>:      double located in [0, 1], the selection probability.
+<cp>:      double located in [0, 1], the crossover probability.
+<length>:  integer higher than 0, the length of association rules.
+Output: 
+<ars>:     a list of association rules, where every rule is also
+           a list, whose last three values are its absolute support
+           , confidence and lift, and the absolute values of values 
+           lower than 0 is the antecedent.
 """
