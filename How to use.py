@@ -105,7 +105,7 @@ Input:
 <length>:  integer higher than 0, the length of association rules.
 Output: 
 <ars>:     a list of association rules, where every rule is also
-           a list, whose last three values are its absolute support
-           , confidence and lift, and the absolute values of values 
-           lower than 0 is the antecedent.
+           a list, whose first element is its antecedent, the second
+           is its consequence, and the last three values are its
+           absolute support, confidence and lift.
 """
