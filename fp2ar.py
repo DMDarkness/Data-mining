@@ -43,14 +43,15 @@ def getAR(fi,N,minconf,minlift):
             pat3=sub2[j]
             pat2.sort()
             pat3.sort()
-            sup2=fid[tuple(pat2)]
-            sup3=fid[tuple(pat3)]
-            #check the lift
-            if(sup1*N*1.0/(sup2*sup3*1.0) > minlift):
-                #check the confidence
-                if(sup1*1.0/sup2 > minconf):
-                    Rule.append([pat2,pat3,sup1,sup1*1.0/sup2,sup1*N*1.0/(sup2*sup3*1.0)])
-                if(sup1*1.0/sup3 > minconf):
-                    Rule.append([pat3,pat2,sup1,sup1*1.0/sup3,sup1*N*1.0/(sup2*sup3*1.0)])      
+            if(fid.has_key(tuple(pat2)) and fid.has_key(tuple(pat3))):
+                sup2=fid[tuple(pat2)]
+                sup3=fid[tuple(pat3)]
+                #check the lift
+                if(sup1*N*1.0/(sup2*sup3*1.0) > minlift):
+                    #check the confidence
+                    if(sup1*1.0/sup2 > minconf):
+                        Rule.append([pat2,pat3,sup1,sup1*1.0/sup2,sup1*N*1.0/(sup2*sup3*1.0)])
+                    if(sup1*1.0/sup3 > minconf):
+                        Rule.append([pat3,pat2,sup1,sup1*1.0/sup3,sup1*N*1.0/(sup2*sup3*1.0)])      
     return Rule
                 
