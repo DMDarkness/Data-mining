@@ -14,6 +14,8 @@ Getting all the subsets with length L and len(pat)-L of the object pattern pat
 def getSubSet(pat,sub1,sub2,L,temp,base):
     if(L<1):
         if(sub1.count(temp)==0):
+            temp.sort()
+            pat.sort()
             sub1.append(temp)
             sub2.append(pat)
     else:
@@ -39,6 +41,9 @@ def getAR(fi,N,minconf,minlift):
         for j in range(1,psLen+1):
             getSubSet(pat,sub1,sub2,j,[],0)
         for j in range(0,len(sub1)):
+            if(sub1.count(sub2[j])!=0):
+                sub1[j]=[-1,-9]
+                sub2[j]=[-2,-5]
             pat2=sub1[j]
             pat3=sub2[j]
             pat2.sort()
@@ -50,8 +55,10 @@ def getAR(fi,N,minconf,minlift):
                 if(sup1*N*1.0/(sup2*sup3*1.0) > minlift):
                     #check the confidence
                     if(sup1*1.0/sup2 > minconf):
-                        Rule.append([pat2,pat3,sup1,sup1*1.0/sup2,sup1*N*1.0/(sup2*sup3*1.0)])
+                        newrule=[pat2,pat3,sup1,sup1*1.0/sup2,sup1*N*1.0/(sup2*sup3*1.0)]
+                        Rule.append(newrule)
                     if(sup1*1.0/sup3 > minconf):
-                        Rule.append([pat3,pat2,sup1,sup1*1.0/sup3,sup1*N*1.0/(sup2*sup3*1.0)])      
+                        newrule=[pat3,pat2,sup1,sup1*1.0/sup3,sup1*N*1.0/(sup2*sup3*1.0)]
+                        Rule.append(newrule)     
     return Rule
                 
