@@ -9,7 +9,7 @@ import pybpsohd#import the module of BPSO-HD
 import pyfpgrowth#import the module of FP-growth
 import pyclt#import the module of Central limit theorem
 import pyarmga#import the module of ARMGA
-import FPtorules#import the module to generate rules from frequent patterns
+import fp2ar#import the module to generate rules from frequent patterns
 
 #The dataset used in this example, which is the first 10 transactions of 'kosarak.dat'
 dataset=[[1, 2, 3]
@@ -90,7 +90,7 @@ Output:
 <SampleN>: the size of sample accorrding to <er> and <prob>           
 """
 
-ar=FPtorules.getAR(fi, len(dataset), 0.7, 1)#form association rules from frequent pattern
+ar=fp2ar.getAR(fi, len(dataset), 0.7, 1)#form association rules from frequent pattern
 """
 <ars>=getAR(<fps>,<N>,<minconf>,<minlift>)
 Input:
